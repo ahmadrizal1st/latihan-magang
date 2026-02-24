@@ -11,11 +11,7 @@ class EmployeeController extends Controller
     public function __construct(
         private EmployeeRepositoryInterface $employeeRepository
     ) {}
-
-    /**
-     * GET /api/employe
-     * Kembalikan semua data karyawan dalam format JSON.
-     */
+    
     public function index()
     {
         $employees = $this->employeeRepository->getAll();

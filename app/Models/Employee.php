@@ -9,16 +9,9 @@ class Employee extends Model
 {
     use HasFactory;
 
-    protected $table = 'employees';
-
     protected $fillable = [
         'name',
         'city',
         'job', 
-    ];
-
-    protected $casts = [
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
     ];
 }
