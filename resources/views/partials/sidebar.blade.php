@@ -26,9 +26,19 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MAIN NAVIGATION</li>
-        <li class="active treeview">
+        <li>
           <a href="{{ url("employee") }}">
             <i class="fa fa-table"></i> <span>Employee</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ url("city") }}">
+            <i class="fa fa-table"></i> <span>City</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ url("employee-job") }}">
+            <i class="fa fa-table"></i> <span>Job</span>
           </a>
         </li>
       </ul>

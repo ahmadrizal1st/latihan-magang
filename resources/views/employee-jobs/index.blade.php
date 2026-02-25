@@ -1,11 +1,11 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Employee')
-@section('page-title', 'Employee')
+@section('title', 'Employee Job')
+@section('page-title', 'Employee Job')
 @section('page-subtitle', 'Table')
 
 @section('breadcrumb')
-    <li class="active">Employee</li>
+    <li class="active">Empoyee Job</li>
 @endsection
 
 @section('content')
@@ -15,7 +15,7 @@
             <div class="box">
 
                 <div class="box-header">
-                    <h3 class="box-title">Employee Data Table</h3>
+                    <h3 class="box-title">Employee Job Data Table</h3>
                 </div>
                 <div class="box-body">
                     <table id="example1" class="table table-bordered table-striped">
@@ -23,19 +23,17 @@
                             <tr>
                                 <th>No</th>
                                 <th>Name</th>
-                                <th>City</th>
-                                <th>Job</th>
+                                <th>Employee</th>
                             </tr>
                         </thead>
-                        <tbody id="employee-table-body">
+                        <tbody id="employee-job-table-body">
                             {{-- Diisi oleh AJAX sebelum DataTable diinisialisasi --}}
                         </tbody>
                         <tfoot>
                             <tr>
                                 <th>No</th>
                                 <th>Name</th>
-                                <th>City</th>
-                                <th>Job</th>
+                                <th>Employee</th>
                             </tr>
                         </tfoot>
                     </table>
@@ -55,23 +53,22 @@
 <script>
 $(function () {
     $.ajax({
-        url: '/api/employee',
+        url: '/api/employee-job',
         type: 'GET',
         dataType: 'json',
         success: function (response) {
-            var tbody = $('#employee-table-body');
+            var tbody = $('#employee-job-table-body');
             tbody.empty();
 
             if (!response.data || response.data.length === 0) {
                 tbody.append('<tr><td colspan="4" class="text-center">No data available</td></tr>');
             } else {
-                $.each(response.data, function (index, employee) {
+                $.each(response.data, function (index, employeeJob) {
                     tbody.append(
                         '<tr>' +
                             '<td>' + (index + 1) + '</td>' +
-                            '<td>' + employee.name + '</td>' +
-                            '<td>' + employee.city.name + '</td>' +
-                            '<td>' + employee.job.name  + '</td>' +
+                            '<td>' + employeeJob.name + '</td>' +
+                            '<td>' + employeeJob.employees.length + '</td>' +
                         '</tr>'
                     );
                 });
@@ -93,7 +90,7 @@ $(function () {
             }
         },
         error: function (xhr, status, error) {
-            $('#employee-table-body').html(
+            $('#employee-job-table-body').html(
                 '<tr><td colspan="4" class="text-center text-danger">' +
                 'Failed to load data: ' + error +
                 '</td></tr>'
