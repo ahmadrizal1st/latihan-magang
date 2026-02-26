@@ -2,21 +2,23 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Resources\EmployeeJobResource;
 use App\Http\Controllers\Controller;
 use App\Interfaces\EmployeeJobRepositoryInterface;
+use Yajra\DataTables\Facades\DataTables;
+
 
 class EmployeeJobController extends Controller
 {
     public function __construct(
-        private EmployeeJobRepositoryInterface $employeeRepository
+        private EmployeeJobRepositoryInterface $employeeJobRepository
     ) {}
-    
+
     public function index()
     {
-        $employees = $this->employeeRepository->getAll();
+        $employeeJobs = $this->employeeJobRepository->getAll();
 
-        return EmployeeJobResource::collection($employees)
-            ->additional(['status' => 'success']);
+        return DataTables::of($employeeJobs)
+        ->addIndexColumn()
+        ->toJson();
     }
 }

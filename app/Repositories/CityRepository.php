@@ -4,7 +4,6 @@ namespace App\Repositories;
 
 use App\Interfaces\CityRepositoryInterface;
 use App\Models\City;
-use Illuminate\Database\Eloquent\Collection;
 
 class CityRepository implements CityRepositoryInterface
 {
@@ -12,10 +11,8 @@ class CityRepository implements CityRepositoryInterface
         private City $model
     ) {}
 
-    public function getAll(): Collection
+    public function getAll()
     {
-        return $this->model
-            ->orderBy('name')
-            ->get();
+        return $this->model->with("employees");
     }
 }

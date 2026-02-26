@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\EmployeeResource;
 use App\Interfaces\EmployeeRepositoryInterface;
+use Yajra\DataTables\Facades\DataTables;
 
 class EmployeeController extends Controller
 {
@@ -16,7 +16,10 @@ class EmployeeController extends Controller
     {
         $employees = $this->employeeRepository->getAll();
 
-        return EmployeeResource::collection($employees)
-            ->additional(['status' => 'success']);
+        return DataTables::of($employees)
+        ->addIndexColumn()
+        ->addColumn('city', fn($employee): string => $employee->city->name ?? '-')
+        ->addColumn('employee_job', fn($employee): string => $employee->employeeJob->name ?? '-')
+        ->toJson();
     }
 }

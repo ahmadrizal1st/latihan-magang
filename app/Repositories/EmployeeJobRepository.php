@@ -4,7 +4,6 @@ namespace App\Repositories;
 
 use App\Interfaces\EmployeeJobRepositoryInterface;
 use App\Models\EmployeeJob;
-use Illuminate\Database\Eloquent\Collection;
 
 class EmployeeJobRepository implements EmployeeJobRepositoryInterface
 {
@@ -12,10 +11,8 @@ class EmployeeJobRepository implements EmployeeJobRepositoryInterface
         private EmployeeJob $model
     ) {}
 
-    public function getAll(): Collection
+    public function getAll()
     {
-        return $this->model
-            ->orderBy('name')
-            ->get();
+        return $this->model->with("employees");
     }
 }

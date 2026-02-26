@@ -2,21 +2,23 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Resources\CityResource;
 use App\Http\Controllers\Controller;
 use App\Interfaces\CityRepositoryInterface;
+use Yajra\DataTables\Facades\DataTables;
+
 
 class CityController extends Controller
 {
     public function __construct(
-        private CityRepositoryInterface $employeeRepository
+        private CityRepositoryInterface $cityRepository
     ) {}
     
     public function index()
     {
-        $employees = $this->employeeRepository->getAll();
+        $cities = $this->cityRepository->getAll();
 
-        return CityResource::collection($employees)
-            ->additional(['status' => 'success']);
+        return DataTables::of($cities)
+        ->addIndexColumn()
+        ->toJson();
     }
 }
