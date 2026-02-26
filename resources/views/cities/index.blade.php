@@ -52,50 +52,33 @@
 @pushOnce('scripts')
 <script>
 $(function () {
-    $.ajax({
-        url: '/api/city',
-        type: 'GET',
-        dataType: 'json',
-        success: function (response) {
-            var tbody = $('#city-table-body');
-            tbody.empty();
-
-            if (!response.data || response.data.length === 0) {
-                tbody.append('<tr><td colspan="4" class="text-center">No data available</td></tr>');
-            } else {
-                $.each(response.data, function (index, city) {
-                    tbody.append(
-                        '<tr>' +
-                            '<td>' + (index + 1) + '</td>' +
-                            '<td>' + city.name + '</td>' +
-                            '<td>' + city.employees.length + '</td>' +
-                        '</tr>'
-                    );
-                });
-            }
-
-            // Initialize DataTable AFTER data is populated
-            $('#example1').DataTable();
-            
-            // Optional: Initialize example2 if it exists
-            if ($('#example2').length) {
-                $('#example2').DataTable({
-                    'paging': true,
-                    'lengthChange': false,
-                    'searching': false,
-                    'ordering': true,
-                    'info': true,
-                    'autoWidth': false
-                });
-            }
+    $('#example1').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: '/api/city',
+            type: 'GET',
         },
-        error: function (xhr, status, error) {
-            $('#city-table-body').html(
-                '<tr><td colspan="4" class="text-center text-danger">' +
-                'Failed to load data: ' + error +
-                '</td></tr>'
-            );
-        }
+        columns: [
+            {
+                data: 'DT_RowIndex',
+                name: 'DT_RowIndex',
+                orderable: false,
+                searchable: false
+            },
+            {
+                data: 'name',
+                name: 'name'
+            },
+            {
+                data: 'employees',
+                orderable: false, 
+                searchable: false,
+                render: function(data) {
+                    return data.length;
+                }
+            }
+        ],
     });
 });
 </script>

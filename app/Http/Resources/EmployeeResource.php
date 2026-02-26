@@ -7,6 +7,9 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class EmployeeResource extends JsonResource
 {
+    /**
+     * Jika menggunakan Yajra datatables maka resource sudah tidak digunakan
+     */
     public function toArray(Request $request): array
     {
         return [
