@@ -17,9 +17,25 @@ class EmployeeJobController extends Controller
 
     public function index(Request $request)
     {
-        // Jika ada parameter search → untuk Select2 AJAX
+        // Jika ada parameter datatable → request dari DataTables
+        if ($request->has('datatable')) {
+            $employeeJobs = $this->employeeJobRepository->getAll();
+
+            return DataTables::of($employeeJobs)
+                ->addIndexColumn()
+                ->addColumn('employees', function ($employeeJob) {
+                    return $employeeJob->employees->toArray();
+                })
+                ->toJson();
+        }
+
+        // Jika ada parameter search → request dari Select2 AJAX
         if ($request->has('search')) {
-            $employeeJobs = $this->employeeJobRepository->search($request->search ?? '');
+            $keyword = is_array($request->search)
+                ? $request->search['term'] ?? ''
+                : $request->search ?? '';
+
+            $employeeJobs = $this->employeeJobRepository->search($keyword);
 
             return response()->json([
                 'results' => $employeeJobs->map(fn($employeeJob) => [
@@ -29,12 +45,7 @@ class EmployeeJobController extends Controller
             ]);
         }
 
-        // Default → untuk DataTables
-        $employeeJobs = $this->employeeJobRepository->getAll();
-
-        return DataTables::of($employeeJobs)
-            ->addIndexColumn()
-            ->toJson();
+        return response()->json(['results' => []]);
     }
 
     public function store(StoreEmployeeJobRequest $request)

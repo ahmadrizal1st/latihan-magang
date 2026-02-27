@@ -164,6 +164,10 @@ $(function () {
         ajax: {
             url: '/api/employee-job',
             type: 'GET',
+            data: function(d) {
+                d.datatable = true;
+                return d;
+            }
         },
         columns: [
             {
@@ -181,6 +185,7 @@ $(function () {
                 orderable: false,
                 searchable: false,
                 render: function(data) {
+                    if (!data || !Array.isArray(data)) return 0;
                     return data.length;
                 }
             },
