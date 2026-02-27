@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\EmployeeJob\StoreEmployeeJobRequest;
+use App\Http\Requests\EmployeeJob\UpdateEmployeeJobRequest;
 use App\Interfaces\EmployeeJobRepositoryInterface;
 use Yajra\DataTables\Facades\DataTables;
-
 
 class EmployeeJobController extends Controller
 {
@@ -18,7 +19,39 @@ class EmployeeJobController extends Controller
         $employeeJobs = $this->employeeJobRepository->getAll();
 
         return DataTables::of($employeeJobs)
-        ->addIndexColumn()
-        ->toJson();
+            ->addIndexColumn()
+            ->toJson();
+    }
+
+    public function store(StoreEmployeeJobRequest $request)
+    {
+        $employeeJob = $this->employeeJobRepository->create($request->validated());
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pekerjaan berhasil ditambahkan.',
+            'data'    => $employeeJob,
+        ], 201);
+    }
+
+    public function update(UpdateEmployeeJobRequest $request, $id)
+    {
+        $employeeJob = $this->employeeJobRepository->update($id, $request->validated());
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pekerjaan berhasil diperbarui.',
+            'data'    => $employeeJob,
+        ]);
+    }
+
+    public function destroy($id)
+    {
+        $this->employeeJobRepository->delete($id);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pekerjaan berhasil dihapus.',
+        ]);
     }
 }
