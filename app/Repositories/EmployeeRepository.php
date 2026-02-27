@@ -27,4 +27,18 @@ class EmployeeRepository implements EmployeeRepositoryInterface
          */
         return Employee::with(['city', 'employeeJob']);
     }
+
+    public function create(array $data){
+        return $this->model->create($data);
+    }
+
+    public function update($id, array $data){
+        $employee = $this->model->findOrFail($id);
+        $employee->update($data);
+        return $employee;
+    }
+
+    public function delete($id){
+        return $this->model->destroy($id);
+    }
 }
