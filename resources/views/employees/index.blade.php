@@ -13,7 +13,6 @@
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
-
                 <div class="box-header">
                     <h3 class="box-title">Employee Data Table</h3>
                     <div class="box-tools pull-right">
@@ -33,9 +32,7 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody id="employee-table-body">
-                            {{-- Diisi oleh AJAX sebelum DataTable diinisialisasi --}}
-                        </tbody>
+                        <tbody></tbody>
                         <tfoot>
                             <tr>
                                 <th>No</th>
@@ -47,43 +44,34 @@
                         </tfoot>
                     </table>
                 </div>
-                {{-- /.box-body --}}
-
             </div>
-            {{-- /.box --}}
         </div>
-        {{-- /.col --}}
     </div>
-    {{-- /.row --}}
 </section>
 
 {{-- Modal Create Employee --}}
-<div class="modal fade" id="modalCreateEmployee" tabindex="-1" role="dialog" aria-labelledby="modalCreateEmployeeLabel">
+<div class="modal fade" id="modalCreateEmployee" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="modalCreateEmployeeLabel">
-                    <i class="fa fa-plus-circle"></i> Create Employee
-                </h4>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                <h4 class="modal-title"><i class="fa fa-plus-circle"></i> Create Employee</h4>
             </div>
             <form id="formCreateEmployee" role="form">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="employeeName">Name <span class="text-red">*</span></label>
-                        <input type="text" class="form-control" id="employeeName" name="name" placeholder="Enter employee name...">
+                        <label>Name <span class="text-red">*</span></label>
+                        <input type="text" class="form-control" name="name" placeholder="Enter employee name...">
                     </div>
                     <div class="form-group">
-                        <label for="employeeCityId">City <span class="text-red">*</span></label>
-                        <select class="form-control" id="employeeCityId" name="city_id">
+                        <label>City <span class="text-red">*</span></label>
+                        <select class="form-control select2-city" name="city_id" style="width: 100%;">
                             <option value="">-- Select City --</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="employeeJobId">Job <span class="text-red">*</span></label>
-                        <select class="form-control" id="employeeJobId" name="employee_job_id">
+                        <label>Job <span class="text-red">*</span></label>
+                        <select class="form-control select2-job" name="employee_job_id" style="width: 100%;">
                             <option value="">-- Select Job --</option>
                         </select>
                     </div>
@@ -100,36 +88,31 @@
         </div>
     </div>
 </div>
-{{-- /.modal --}}
 
 {{-- Modal Edit Employee --}}
-<div class="modal fade" id="modalEditEmployee" tabindex="-1" role="dialog" aria-labelledby="modalEditEmployeeLabel">
+<div class="modal fade" id="modalEditEmployee" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="modalEditEmployeeLabel">
-                    <i class="fa fa-pencil"></i> Edit Employee
-                </h4>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                <h4 class="modal-title"><i class="fa fa-pencil"></i> Edit Employee</h4>
             </div>
             <form id="formEditEmployee" role="form">
                 <input type="hidden" id="editEmployeeId" name="id">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="editEmployeeName">Name <span class="text-red">*</span></label>
+                        <label>Name <span class="text-red">*</span></label>
                         <input type="text" class="form-control" id="editEmployeeName" name="name" placeholder="Enter employee name...">
                     </div>
                     <div class="form-group">
-                        <label for="editEmployeeCityId">City <span class="text-red">*</span></label>
-                        <select class="form-control" id="editEmployeeCityId" name="city_id">
+                        <label>City <span class="text-red">*</span></label>
+                        <select class="form-control select2-city" name="city_id" style="width: 100%;">
                             <option value="">-- Select City --</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="editEmployeeJobId">Job <span class="text-red">*</span></label>
-                        <select class="form-control" id="editEmployeeJobId" name="employee_job_id">
+                        <label>Job <span class="text-red">*</span></label>
+                        <select class="form-control select2-job" name="employee_job_id" style="width: 100%;">
                             <option value="">-- Select Job --</option>
                         </select>
                     </div>
@@ -146,19 +129,16 @@
         </div>
     </div>
 </div>
-{{-- /.modal --}}
 
 {{-- Modal Confirm Delete --}}
-<div class="modal fade" id="modalDeleteEmployee" tabindex="-1" role="dialog" aria-labelledby="modalDeleteEmployeeLabel">
+<div class="modal fade" id="modalDeleteEmployee" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header" style="background-color: #dd4b39; color: #fff;">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true" style="color:#fff;">&times;</span>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span style="color:#fff;">&times;</span>
                 </button>
-                <h4 class="modal-title" id="modalDeleteEmployeeLabel">
-                    <i class="fa fa-trash"></i> Confirm Delete
-                </h4>
+                <h4 class="modal-title"><i class="fa fa-trash"></i> Confirm Delete</h4>
             </div>
             <div class="modal-body">
                 <p>Are you sure you want to delete <strong id="deleteEmployeeName"></strong>?</p>
@@ -176,14 +156,94 @@
         </div>
     </div>
 </div>
-{{-- /.modal --}}
 
 @endsection
 
 @pushOnce('scripts')
 <script>
 $(function () {
-    // Initialize DataTable
+
+    // HELPER: Init Select2 AJAX - City
+    function initSelect2City(selector, selectedId, selectedText) {
+        var $el = $(selector);
+
+        // Destroy jika sudah pernah diinisialisasi
+        if ($el.hasClass('select2-hidden-accessible')) {
+            $el.select2('destroy');
+        }
+
+        $el.select2({
+            dropdownParent: $el.closest('.modal'),
+            placeholder: '-- Select City --',
+            allowClear: true,
+            minimumInputLength: 0,
+            ajax: {
+                url: '/api/city',
+                dataType: 'json',
+                delay: 300,
+                data: function (params) {
+                    return { search: params.term ?? '' };
+                },
+                processResults: function (response) {
+                    // Jika API return { results: [...] } langsung pakai
+                    // Jika return { data: [...] } atau array, mapping manual
+                    var items = response.results ?? response.data ?? response;
+                    return {
+                        results: $.map(items, function (city) {
+                            return { id: city.id, text: city.text ?? city.name };
+                        })
+                    };
+                },
+                cache: true
+            }
+        });
+
+        // Set nilai awal untuk mode Edit
+        if (selectedId && selectedText) {
+            var option = new Option(selectedText, selectedId, true, true);
+            $el.append(option).trigger('change');
+        }
+    }
+
+    // HELPER: Init Select2 AJAX - Job
+    function initSelect2Job(selector, selectedId, selectedText) {
+        var $el = $(selector);
+
+        if ($el.hasClass('select2-hidden-accessible')) {
+            $el.select2('destroy');
+        }
+
+        $el.select2({
+            dropdownParent: $el.closest('.modal'),
+            placeholder: '-- Select Job --',
+            allowClear: true,
+            minimumInputLength: 0,
+            ajax: {
+                url: '/api/employee-job',
+                dataType: 'json',
+                delay: 300,
+                data: function (params) {
+                    return { search: params.term ?? '' };
+                },
+                processResults: function (response) {
+                    var items = response.results ?? response.data ?? response;
+                    return {
+                        results: $.map(items, function (job) {
+                            return { id: job.id, text: job.text ?? job.name };
+                        })
+                    };
+                },
+                cache: true
+            }
+        });
+
+        if (selectedId && selectedText) {
+            var option = new Option(selectedText, selectedId, true, true);
+            $el.append(option).trigger('change');
+        }
+    }
+
+    // DATATABLES
     var table = $('#example1').DataTable({
         processing: true,
         serverSide: true,
@@ -192,35 +252,23 @@ $(function () {
             type: 'GET',
         },
         columns: [
-            {
-                data: 'DT_RowIndex',
-                name: 'DT_RowIndex',
-                orderable: false,
-                searchable: false
-            },
-            {
-                data: 'name',
-                name: 'name'
-            },
-            {
-                data: 'city',
-                name: 'city.name'
-            },
-            {
-                data: 'employee_job',
-                name: 'employeeJob.name'
-            },
+            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+            { data: 'name', name: 'name' },
+            { data: 'city', name: 'city.name' },
+            { data: 'employee_job', name: 'employeeJob.name' },
             {
                 data: 'id',
                 orderable: false,
                 searchable: false,
-                render: function(data, type, row) {
+                render: function (data, type, row) {
                     return `
                         <button class="btn btn-warning btn-xs btn-edit"
                             data-id="${data}"
                             data-name="${row.name}"
                             data-city-id="${row.city_id ?? ''}"
-                            data-job-id="${row.employee_job_id ?? ''}">
+                            data-city-name="${row.city_name ?? ''}"
+                            data-job-id="${row.employee_job_id ?? ''}"
+                            data-job-name="${row.employee_job_name ?? ''}">
                             <i class="fa fa-pencil"></i> Edit
                         </button>
                         <button class="btn btn-danger btn-xs btn-delete"
@@ -234,36 +282,13 @@ $(function () {
         ],
     });
 
-    // LOAD DROPDOWN OPTIONS
-    function loadCities(selectSelector, selectedId) {
-        $.get('/api/city', { all: true }, function(response) {
-            var options = '<option value="">-- Select City --</option>';
-            $.each(response.data ?? response, function(i, city) {
-                var selected = (city.id == selectedId) ? 'selected' : '';
-                options += `<option value="${city.id}" ${selected}>${city.name}</option>`;
-            });
-            $(selectSelector).html(options);
-        });
-    }
-
-    function loadJobs(selectSelector, selectedId) {
-        $.get('/api/employee-job', { all: true }, function(response) {
-            var options = '<option value="">-- Select Job --</option>';
-            $.each(response.data ?? response, function(i, job) {
-                var selected = (job.id == selectedId) ? 'selected' : '';
-                options += `<option value="${job.id}" ${selected}>${job.name}</option>`;
-            });
-            $(selectSelector).html(options);
-        });
-    }
-
     // CREATE
-    $('#modalCreateEmployee').on('show.bs.modal', function() {
-        loadCities('#employeeCityId', null);
-        loadJobs('#employeeJobId', null);
+    $('#modalCreateEmployee').on('show.bs.modal', function () {
+        initSelect2City('#formCreateEmployee .select2-city', null, null);
+        initSelect2Job('#formCreateEmployee .select2-job', null, null);
     });
 
-    $('#formCreateEmployee').on('submit', function(e) {
+    $('#formCreateEmployee').on('submit', function (e) {
         e.preventDefault();
 
         var $btn = $(this).find('[type="submit"]');
@@ -273,37 +298,39 @@ $(function () {
             url: '/api/employee',
             type: 'POST',
             data: $(this).serialize(),
-            success: function(response) {
+            success: function () {
                 $('#modalCreateEmployee').modal('hide');
                 table.ajax.reload();
             },
-            error: function(xhr) {
+            error: function (xhr) {
                 handleValidationErrors(xhr, '#formCreateEmployee');
             },
-            complete: function() {
+            complete: function () {
                 $btn.prop('disabled', false).html('<i class="fa fa-save"></i> Save');
             }
         });
     });
 
-    // OPEN EDIT MODAL
-    $('#example1').on('click', '.btn-edit', function() {
-        var id     = $(this).data('id');
-        var name   = $(this).data('name');
-        var cityId = $(this).data('city-id');
-        var jobId  = $(this).data('job-id');
+    // EDIT
+    $('#example1').on('click', '.btn-edit', function () {
+        var id       = $(this).data('id');
+        var name     = $(this).data('name');
+        var cityId   = $(this).data('city-id');
+        var cityName = $(this).data('city-name');
+        var jobId    = $(this).data('job-id');
+        var jobName  = $(this).data('job-name');
 
         $('#editEmployeeId').val(id);
         $('#editEmployeeName').val(name);
 
-        loadCities('#editEmployeeCityId', cityId);
-        loadJobs('#editEmployeeJobId', jobId);
+        // Init Select2 dengan pre-selected value
+        initSelect2City('#formEditEmployee .select2-city', cityId, cityName);
+        initSelect2Job('#formEditEmployee .select2-job', jobId, jobName);
 
         $('#modalEditEmployee').modal('show');
     });
 
-    // EDIT SUBMIT
-    $('#formEditEmployee').on('submit', function(e) {
+    $('#formEditEmployee').on('submit', function (e) {
         e.preventDefault();
 
         var id   = $('#editEmployeeId').val();
@@ -314,32 +341,27 @@ $(function () {
             url: '/api/employee/' + id,
             type: 'PUT',
             data: $(this).serialize(),
-            success: function(response) {
+            success: function () {
                 $('#modalEditEmployee').modal('hide');
                 table.ajax.reload(null, false);
             },
-            error: function(xhr) {
+            error: function (xhr) {
                 handleValidationErrors(xhr, '#formEditEmployee');
             },
-            complete: function() {
+            complete: function () {
                 $btn.prop('disabled', false).html('<i class="fa fa-save"></i> Update');
             }
         });
     });
 
-    // OPEN DELETE MODAL
-    $('#example1').on('click', '.btn-delete', function() {
-        var id   = $(this).data('id');
-        var name = $(this).data('name');
-
-        $('#deleteEmployeeId').val(id);
-        $('#deleteEmployeeName').text(name);
-
+    // DELETE
+    $('#example1').on('click', '.btn-delete', function () {
+        $('#deleteEmployeeId').val($(this).data('id'));
+        $('#deleteEmployeeName').text($(this).data('name'));
         $('#modalDeleteEmployee').modal('show');
     });
 
-    // CONFIRM DELETE
-    $('#btnConfirmDelete').on('click', function() {
+    $('#btnConfirmDelete').on('click', function () {
         var id   = $('#deleteEmployeeId').val();
         var $btn = $(this);
         $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Deleting...');
@@ -347,40 +369,50 @@ $(function () {
         $.ajax({
             url: '/api/employee/' + id,
             type: 'DELETE',
-            success: function(response) {
+            success: function () {
                 $('#modalDeleteEmployee').modal('hide');
                 table.ajax.reload(null, false);
             },
-            error: function(xhr) {
+            error: function () {
                 alert('Failed to delete. Please try again.');
             },
-            complete: function() {
+            complete: function () {
                 $btn.prop('disabled', false).html('<i class="fa fa-trash"></i> Delete');
             }
         });
     });
 
-    // RESET MODALS ON CLOSE
-    $('#modalCreateEmployee, #modalEditEmployee').on('hidden.bs.modal', function() {
-        $(this).find('form')[0].reset();
-        $(this).find('.form-group').removeClass('has-error');
-        $(this).find('.help-block.error-msg').remove();
+    // RESET MODAL
+    $('#modalCreateEmployee, #modalEditEmployee').on('hidden.bs.modal', function () {
+        var $form = $(this).find('form');
+        $form[0].reset();
+
+        // Destroy & reset Select2
+        $form.find('.select2-city, .select2-job').each(function () {
+            if ($(this).hasClass('select2-hidden-accessible')) {
+                $(this).val(null).trigger('change');
+            }
+        });
+
+        $form.find('.form-group').removeClass('has-error');
+        $form.find('.help-block.error-msg').remove();
     });
 
-    // HELPER: Validation Errors
+    // HELPER: Tampilkan Validation Errors
     function handleValidationErrors(xhr, formSelector) {
         $(formSelector + ' .form-group').removeClass('has-error');
         $(formSelector + ' .help-block.error-msg').remove();
 
         var errors = xhr.responseJSON?.errors;
         if (errors) {
-            $.each(errors, function(field, messages) {
+            $.each(errors, function (field, messages) {
                 var $input = $(formSelector + ' [name="' + field + '"]');
                 $input.closest('.form-group').addClass('has-error');
                 $input.after('<span class="help-block error-msg">' + messages[0] + '</span>');
             });
         }
     }
+
 });
 </script>
 @endPushOnce

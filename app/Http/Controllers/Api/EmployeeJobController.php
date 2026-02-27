@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\EmployeeJob\StoreEmployeeJobRequest;
 use App\Http\Requests\EmployeeJob\UpdateEmployeeJobRequest;
 use App\Interfaces\EmployeeJobRepositoryInterface;
+use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
 class EmployeeJobController extends Controller
@@ -14,8 +15,21 @@ class EmployeeJobController extends Controller
         private EmployeeJobRepositoryInterface $employeeJobRepository
     ) {}
 
-    public function index()
+    public function index(Request $request)
     {
+        // Jika ada parameter search → untuk Select2 AJAX
+        if ($request->has('search')) {
+            $employeeJobs = $this->employeeJobRepository->search($request->search ?? '');
+
+            return response()->json([
+                'results' => $employeeJobs->map(fn($employeeJob) => [
+                    'id'   => $employeeJob->id,
+                    'text' => $employeeJob->name,
+                ])
+            ]);
+        }
+
+        // Default → untuk DataTables
         $employeeJobs = $this->employeeJobRepository->getAll();
 
         return DataTables::of($employeeJobs)

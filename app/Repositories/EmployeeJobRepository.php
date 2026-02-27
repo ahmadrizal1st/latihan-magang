@@ -16,6 +16,14 @@ class EmployeeJobRepository implements EmployeeJobRepositoryInterface
         return $this->model->with("employees");
     }
 
+    public function search(string $keyword) 
+    {
+        return EmployeeJob::whereLike('name', "%{$keyword}%")
+            ->select('id', 'name')
+            ->orderBy('name')
+            ->get();
+    }
+
     public function create(array $data){
         return $this->model->create($data);
     }

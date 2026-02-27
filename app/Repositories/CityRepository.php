@@ -16,6 +16,14 @@ class CityRepository implements CityRepositoryInterface
         return $this->model->with("employees");
     }
 
+    public function search(string $keyword) 
+    {
+        return City::whereLike('name',"%{$keyword}%")
+            ->select('id', 'name')
+            ->orderBy('name')
+            ->get();
+    }
+
     public function create(array $data){
         return $this->model->create($data);
     }

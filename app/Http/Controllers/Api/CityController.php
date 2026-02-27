@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\City\UpdateCityRequest;
 use App\Http\Requests\City\StoreCityRequest;
+use App\Http\Requests\City\UpdateCityRequest;
 use App\Interfaces\CityRepositoryInterface;
+use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
 class CityController extends Controller
@@ -14,8 +15,21 @@ class CityController extends Controller
         private CityRepositoryInterface $cityRepository
     ) {}
 
-    public function index()
+    public function index(Request $request)
     {
+        // Jika ada parameter search → untuk Select2 AJAX
+        if ($request->has('search')) {
+            $cities = $this->cityRepository->search($request->search ?? '');
+
+            return response()->json([
+                'results' => $cities->map(fn($city) => [
+                    'id'   => $city->id,
+                    'text' => $city->name,
+                ])
+            ]);
+        }
+
+        // Default → untuk DataTables
         $cities = $this->cityRepository->getAll();
 
         return DataTables::of($cities)
