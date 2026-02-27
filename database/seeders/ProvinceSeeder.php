@@ -17,7 +17,9 @@ class ProvinceSeeder extends Seeder
     {
         $this->command->info('Mengambil data provinces...');
 
-        $response = Http::get("{$this->baseUrl}/provinces.json");
+        $response = Http::timeout(60)
+                        ->retry(3, 2000)
+                        ->get("{$this->baseUrl}/provinces.json");
 
         if ($response->failed()) {
             $this->command->error('Gagal mengambil data provinces!');
@@ -26,16 +28,27 @@ class ProvinceSeeder extends Seeder
 
         $provinces = $response->json();
 
+        if (empty($provinces)) {
+            $this->command->error('Data provinces kosong!');
+            return;
+        }
+
         $this->command->info('Insert ' . count($provinces) . ' provinces...');
         $bar = $this->command->getOutput()->createProgressBar(count($provinces));
         $bar->start();
 
-        foreach ($provinces as $province) {
-            Province::updateOrCreate(
-                ['id'   => $province['id']],
-                ['name' => $province['name']]
-            );
-            $bar->advance();
+        $provinceData = collect($provinces)->map(fn($p) => [
+            'id'         => $p['id'],
+            'name'       => $p['name'],
+            'created_at' => now(),
+            'updated_at' => now(),
+        ])
+        ->unique('id')
+        ->values()
+        ->toArray();
+
+        foreach (array_chunk($provinceData, 100) as $chunk) {
+            Province::upsert($chunk, ['id'], ['name', 'updated_at']);
         }
 
         $bar->finish();

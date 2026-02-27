@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 class DistrictSeeder extends Seeder
 {
     private string $baseUrl = 'https://emsifa.github.io/api-wilayah-indonesia/api';
-    
+
     /**
      * Run the database seeds.
      */
@@ -30,7 +30,14 @@ class DistrictSeeder extends Seeder
         $bar->start();
 
         foreach ($cities as $city) {
-            $response = Http::get("{$this->baseUrl}/districts/{$city->id}.json");
+            if (District::where('city_id', $city->id)->exists()) {
+                $bar->advance();
+                continue;
+            }
+
+            $response = Http::timeout(60)
+                            ->retry(3, 2000)
+                            ->get("{$this->baseUrl}/districts/{$city->id}.json");
 
             if ($response->failed()) {
                 Log::warning("Gagal ambil districts untuk city_id: {$city->id}");
@@ -40,14 +47,24 @@ class DistrictSeeder extends Seeder
 
             $districts = $response->json();
 
-            foreach ($districts as $district) {
-                District::updateOrCreate(
-                    ['id'      =>  $district['id']],
-                    [
-                        'name'    => $district['name'],
-                        'city_id' => $city->id,
-                    ]
-                );
+            if (empty($districts)) {
+                $bar->advance();
+                continue;
+            }
+
+            $districtData = collect($districts)->map(fn($d) => [
+                'id'         => $d['id'],
+                'name'       => $d['name'],
+                'city_id'    => $city->id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ])
+            ->unique('id')
+            ->values()
+            ->toArray();
+
+            foreach (array_chunk($districtData, 100) as $chunk) {
+                District::upsert($chunk, ['id'], ['name', 'city_id', 'updated_at']);
             }
 
             $bar->advance();
