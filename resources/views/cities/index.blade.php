@@ -164,6 +164,10 @@ $(function () {
         ajax: {
             url: '/api/city',
             type: 'GET',
+            data: function(d) {
+                d.datatable = true;
+                return d;
+            }
         },
         columns: [
             {
@@ -181,6 +185,7 @@ $(function () {
                 orderable: false,
                 searchable: false,
                 render: function(data) {
+                    if (!data || !Array.isArray(data)) return 0;
                     return data.length;
                 }
             },
@@ -192,8 +197,7 @@ $(function () {
                     return `
                         <button class="btn btn-warning btn-xs btn-edit"
                             data-id="${data}"
-                            data-name="${row.name}"
-                            data-description="${row.description ?? ''}">
+                            data-name="${row.name}">
                             <i class="fa fa-pencil"></i> Edit
                         </button>
                         <button class="btn btn-danger btn-xs btn-delete"

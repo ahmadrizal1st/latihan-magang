@@ -17,9 +17,25 @@ class CityController extends Controller
 
     public function index(Request $request)
     {
-        // Jika ada parameter search → untuk Select2 AJAX
+        // Jika ada parameter datatable → request dari DataTables
+        if ($request->has('datatable')) {
+            $cities = $this->cityRepository->getAll();
+
+            return DataTables::of($cities)
+                ->addIndexColumn()
+                ->addColumn('employees', function ($city) {
+                    return $city->employees->toArray();
+                })
+                ->toJson();
+        }
+
+        // Jika ada parameter search → request dari Select2 AJAX
         if ($request->has('search')) {
-            $cities = $this->cityRepository->search($request->search ?? '');
+            $keyword = is_array($request->search)
+                ? $request->search['term'] ?? ''
+                : $request->search ?? '';
+
+            $cities = $this->cityRepository->search($keyword);
 
             return response()->json([
                 'results' => $cities->map(fn($city) => [
@@ -29,12 +45,7 @@ class CityController extends Controller
             ]);
         }
 
-        // Default → untuk DataTables
-        $cities = $this->cityRepository->getAll();
-
-        return DataTables::of($cities)
-            ->addIndexColumn()
-            ->toJson();
+        return response()->json(['results' => []]);
     }
 
     public function store(StoreCityRequest $request)

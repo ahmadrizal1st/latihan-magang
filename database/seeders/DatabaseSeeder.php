@@ -15,8 +15,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call(EmployeeSeeder::class);
-        // $this->call(CitySeeder::class);
-        // $this->call(EmployeeJobSeeder::class);
+        $this->call(ProvinceSeeder::class);
+        $this->call(CitySeeder::class);
+        $this->call(DistrictSeeder::class);
+        $this->call(VillageSeeder::class);
     }
 }
