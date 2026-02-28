@@ -6,28 +6,74 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Employee\StoreEmployeeRequest;
 use App\Http\Requests\Employee\UpdateEmployeeRequest;
 use App\Interfaces\EmployeeRepositoryInterface;
+use App\Services\NipService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
 class EmployeeController extends Controller
 {
     public function __construct(
-        private EmployeeRepositoryInterface $employeeRepository
+        private EmployeeRepositoryInterface $employeeRepository,
+        private NipService $nipService,
     ) {}
 
-    public function index()
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request)
     {
-        $employees = $this->employeeRepository->getAll();
+        if ($request->has('datatable')) {
+            $employees = $this->employeeRepository->getAll();
 
-        return DataTables::of($employees)
-            ->addIndexColumn()
-            ->addColumn('city', fn($employee): string => $employee->city->name ?? '-')
-            ->addColumn('employee_job', fn($employee): string => $employee->employeeJob->name ?? '-')
-            ->toJson();
+            return DataTables::of($employees)
+                ->addIndexColumn()
+                ->addColumn('province', fn($employee): string => $employee->province->name ?? '-')
+                ->addColumn('city', fn($employee): string => $employee->city->name ?? '-')
+                ->addColumn('district', fn($employee): string => $employee->district->name ?? '-')
+                ->addColumn('village', fn($employee): string => $employee->village->name ?? '-')
+                ->addColumn('postal_code', fn($employee): string => $employee->postalCode->code ?? '-')
+                ->addColumn('employee_job', fn($employee): string => $employee->employeeJob->name ?? '-')
+                ->addColumn('photo_url', fn($employee): string => $employee->photo
+                    ? Storage::url($employee->photo)
+                    : asset('images/default-avatar.png')
+                )
+                ->toJson();
+        }
+
+        if ($request->has('search')) {
+            $keyword = is_array($request->search)
+                ? $request->search['term'] ?? ''
+                : $request->search ?? '';
+
+            $employees = $this->employeeRepository->search($keyword);
+
+            return response()->json([
+                'results' => $employees->map(fn($employee) => [
+                    'id'   => $employee->id,
+                    'text' => $employee->name . ' - ' . $employee->nip,
+                ])
+            ]);
+        }
+
+        return response()->json(['results' => []]);
     }
 
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(StoreEmployeeRequest $request)
     {
-        $employee = $this->employeeRepository->create($request->validated());
+        $data = $request->validated();
+
+        // Generate NIP otomatis dari tanggal lahir
+        $data['nip'] = $this->nipService->generate($data['date_of_birth']);
+
+        if ($request->hasFile('photo')) {
+            $data['photo'] = $request->file('photo')->store('employees/photos', 'public');
+        }
+
+        $employee = $this->employeeRepository->create($data);
 
         return response()->json([
             'success' => true,
@@ -36,6 +82,9 @@ class EmployeeController extends Controller
         ], 201);
     }
 
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(UpdateEmployeeRequest $request, $id)
     {
         $employee = $this->employeeRepository->update($id, $request->validated());
@@ -47,6 +96,9 @@ class EmployeeController extends Controller
         ]);
     }
 
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy($id)
     {
         $this->employeeRepository->delete($id);

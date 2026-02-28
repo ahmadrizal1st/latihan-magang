@@ -11,6 +11,7 @@ class Employee extends Model
 
     protected $fillable = [
         'name',
+        'nip',
         'job_id',
         'date_of_birth',
         'place_of_birth',
