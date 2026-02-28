@@ -7,6 +7,9 @@ use App\Models\Employee;
 
 class EmployeeSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     */
     public function run(): void
     {
         Employee::factory(20)->create();
