@@ -572,7 +572,10 @@ $(function () {
                 a.remove();
             },
             error   : function () { alert('Gagal generate ID Card. Silakan coba lagi.'); },
-            complete: function () { $btn.prop('disabled', false); updateBulkButton(); }
+            complete: function () {
+                $btn.prop('disabled', false).html('<i class="fa fa-file-pdf-o"></i> Download ID Card (<span id="bulkCount">0</span>)');
+                updateBulkButton();
+            }
         });
     });
 
