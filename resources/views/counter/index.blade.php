@@ -169,6 +169,9 @@ $(function () {
     var table = $('#example1').DataTable({
         processing: true,
         serverSide: true,
+        scrollX: true,
+        responsive: true,
+        autoWidth: false,
         ajax: {
             url: '/api/counter',
             type: 'GET',

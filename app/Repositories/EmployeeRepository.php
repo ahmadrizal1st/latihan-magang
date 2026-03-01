@@ -22,7 +22,6 @@ class EmployeeRepository implements EmployeeRepositoryInterface
             'city',
             'district',
             'village',
-            'postalCode',
         ]);
     }
 

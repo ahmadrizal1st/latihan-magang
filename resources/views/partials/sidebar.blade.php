@@ -26,49 +26,39 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MAIN NAVIGATION</li>
-        <li>
-          <a href="{{ url("employee") }}">
-            <i class="fa fa-table"></i> <span>Employee</span>
-          </a>
-        </li>
-        <li>
-          <a href="{{ url("job") }}">
-            <i class="fa fa-table"></i> <span>Job</span>
-          </a>
+          <li>
+            <a href="{{ url("employee") }}">
+              <i class="fa fa-users"></i> <span>Employee</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{ url("job") }}">
+              <i class="fa fa-briefcase"></i> <span>Job</span>
+            </a>
+          </li>
 
-        <li class="header">WILAYAH</li>
+          <li class="header">Region</li>
           <li>
             <a href="{{ url("province") }}">
-              <i class="fa fa-table"></i>
-              Provinsi
+              <i class="fa fa-map"></i> Province
             </a>
           </li>
           <li>
             <a href="{{ url("city") }}">
-              <i class="fa fa-table"></i>
-              Kota/Kabupaten
+              <i class="fa fa-building"></i> City
             </a>
           </li>
           <li>
             <a href="{{ url("district") }}">
-              <i class="fa fa-table"></i>
-              Kecamatan
+              <i class="fa fa-map-marker"></i> District
             </a>
           </li>
           <li>
             <a href="{{ url("village") }}">
-              <i class="fa fa-table"></i>
-              Kelurahan
-            </a>
-          </li>
-          <li>
-            <a href="{{ url("postal-code") }}">
-              <i class="fa fa-table"></i>
-              Kode Pos
+              <i class="fa fa-home"></i> Village
             </a>
           </li>
         </li>
-      </li>
       </ul>
     </section>
     <!-- /.sidebar -->

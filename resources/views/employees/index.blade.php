@@ -139,8 +139,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Postal Code <span class="text-red">*</span></label>
-                                {{-- ← Diubah dari input text menjadi select Select2 --}}
-                                <select class="form-control select2-postal-code" name="postal_code_id" style="width: 100%;"></select>
+                                <input type="text" class="form-control" name="post_code" placeholder="Enter postal code...">
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -243,8 +242,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Postal Code <span class="text-red">*</span></label>
-                                {{-- ← Diubah dari input text menjadi select Select2 --}}
-                                <select class="form-control select2-postal-code" name="postal_code_id" style="width: 100%;"></select>
+                                <input type="text" class="form-control" id="editEmployeePostCode" name="post_code" placeholder="Enter postal code...">
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -359,11 +357,9 @@ $(function () {
         var $district = $form.find('.select2-district');
         var $village  = $form.find('.select2-village');
         var $job      = $form.find('.select2-job');
-        var $postal   = $form.find('.select2-postal-code'); // ← tambahan
 
-        makeSelect2($province, '/api/province',    '-- Select Province --');
-        makeSelect2($job,      '/api/job',         '-- Select Job --');
-        makeSelect2($postal,   '/api/postal-code', '-- Select Postal Code --'); // ← tambahan
+        makeSelect2($province, '/api/province', '-- Select Province --');
+        makeSelect2($job,      '/api/job',      '-- Select Job --');
 
         // ── Province → City ──────────────────────────────────────────────────
         $province.off('change.cascade').on('change.cascade', function () {
@@ -411,6 +407,8 @@ $(function () {
         processing: true,
         serverSide: true,
         scrollX: true,
+        responsive: true,
+        autoWidth: false,
         ajax: {
             url: '/api/employee',
             type: 'GET',
@@ -420,7 +418,7 @@ $(function () {
             }
         },
         columns: [
-            { data: 'DT_RowIndex',   name: 'DT_RowIndex',      orderable: false, searchable: false },
+            { data: 'DT_RowIndex',       name: 'DT_RowIndex',       orderable: false, searchable: false },
             {
                 data: 'photo_url',
                 name: 'photo',
@@ -434,11 +432,11 @@ $(function () {
             },
             { data: 'nip',               name: 'nip' },
             { data: 'name',              name: 'name' },
-            { data: 'province_name',     name: 'province_name', orderable: false, searchable: false, defaultContent: '-' },
-            { data: 'city_name',         name: 'city_name',     orderable: false, searchable: false, defaultContent: '-' },
-            { data: 'district_name',     name: 'district_name', orderable: false, searchable: false, defaultContent: '-' },
-            { data: 'village_name',      name: 'village_name',  orderable: false, searchable: false, defaultContent: '-' },
-            { data: 'postal_code_name',  name: 'postal_code_name',   orderable: false, searchable: false, defaultContent: '-' },
+            { data: 'province_name',     name: 'province_name',     orderable: false, searchable: false, defaultContent: '-' },
+            { data: 'city_name',         name: 'city_name',         orderable: false, searchable: false, defaultContent: '-' },
+            { data: 'district_name',     name: 'district_name',     orderable: false, searchable: false, defaultContent: '-' },
+            { data: 'village_name',      name: 'village_name',      orderable: false, searchable: false, defaultContent: '-' },
+            { data: 'post_code',         name: 'post_code',         orderable: false, searchable: false, defaultContent: '-' },
             { data: 'employee_job_name', name: 'employee_job_name', orderable: false, searchable: false, defaultContent: '-' },
             {
                 data: null,
@@ -460,8 +458,7 @@ $(function () {
                             data-district-name="${row.district_name ?? ''}"
                             data-village-id="${row.village_id ?? ''}"
                             data-village-name="${row.village_name ?? ''}"
-                            data-postal-code-id="${row.postal_code_id ?? ''}"
-                            data-postal-code-text="${row.postal_code_name ?? ''}"
+                            data-post-code="${row.post_code ?? ''}"
                             data-job-id="${row.job_id ?? ''}"
                             data-job-name="${row.employee_job_name ?? ''}"
                             data-photo-url="${row.photo_url ?? ''}">
@@ -518,6 +515,7 @@ $(function () {
         $('#editEmployeeDob').val($btn.data('dob'));
         $('#editEmployeePlaceOfBirth').val($btn.data('place-of-birth'));
         $('#editEmployeeAddress').val($btn.data('address'));
+        $('#editEmployeePostCode').val($btn.data('post-code'));
 
         var photoUrl = $btn.data('photo-url');
         $('#editPhotoPreview').html(
@@ -534,7 +532,6 @@ $(function () {
         var $district = $form.find('.select2-district');
         var $village  = $form.find('.select2-village');
         var $job      = $form.find('.select2-job');
-        var $postal   = $form.find('.select2-postal-code'); // ← tambahan
 
         var provinceId   = $btn.data('province-id');
         var provinceName = $btn.data('province-name');
@@ -570,9 +567,6 @@ $(function () {
             });
             setSelect2Val($village, villageId, villageName);
         }
-
-        // ← Set nilai awal postal code
-        setSelect2Val($postal, $btn.data('postal-code-id'), $btn.data('postal-code-text'));
 
         setSelect2Val($job, $btn.data('job-id'), $btn.data('job-name'));
 
@@ -642,8 +636,7 @@ $(function () {
         var $form = $(this).find('form');
         $form[0].reset();
 
-        // ← Tambahkan .select2-postal-code di sini
-        $form.find('.select2-province, .select2-city, .select2-district, .select2-village, .select2-job, .select2-postal-code').each(function () {
+        $form.find('.select2-province, .select2-city, .select2-district, .select2-village, .select2-job').each(function () {
             if ($(this).hasClass('select2-hidden-accessible')) {
                 $(this).select2('destroy');
             }
