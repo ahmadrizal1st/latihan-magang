@@ -13,8 +13,6 @@ class EmployeeRepository implements EmployeeRepositoryInterface
 
     /**
      * Get all employees with their related data.
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function getAll()
     {
@@ -29,30 +27,15 @@ class EmployeeRepository implements EmployeeRepositoryInterface
     }
 
     /**
-     * Find a single employee by ID with all related data.
-     *
-     * @param  int|string  $id
-     * @return \App\Models\Employee
-     *
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     * Find by id employees with their related data.
      */
     public function findById($id)
     {
-        return $this->model->with([
-            'employeeJob',
-            'province',
-            'city',
-            'district',
-            'village',
-            'postalCode',
-        ])->findOrFail($id);
+        return $this->model->findOrFail($id);
     }
 
     /**
      * Search employees by name or NIP.
-     *
-     * @param  string  $keyword
-     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function search(string $keyword)
     {
@@ -66,9 +49,6 @@ class EmployeeRepository implements EmployeeRepositoryInterface
 
     /**
      * Create a new employee record.
-     *
-     * @param  array  $data
-     * @return \App\Models\Employee
      */
     public function create(array $data)
     {
@@ -77,12 +57,6 @@ class EmployeeRepository implements EmployeeRepositoryInterface
 
     /**
      * Update an existing employee record by ID.
-     *
-     * @param  int|string  $id
-     * @param  array       $data
-     * @return \App\Models\Employee
-     *
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
     public function update($id, array $data)
     {
@@ -93,9 +67,6 @@ class EmployeeRepository implements EmployeeRepositoryInterface
 
     /**
      * Delete an employee record by ID.
-     *
-     * @param  int|string  $id
-     * @return int
      */
     public function delete($id)
     {

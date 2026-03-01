@@ -2,30 +2,30 @@
 
 namespace App\Interfaces;
 
-interface EmployeeJobRepositoryInterface
+interface CounterRepositoryInterface
 {
     /**
-     * Get all employee jobs with their related data.
+     * Get all counters with their related data.
      */
     public function getAll();
 
     /**
-     * Search employee jobs by name.
+     * Search counters by name.
      */
     public function search(string $keyword);
 
     /**
-     * Create a new employee job record.
+     * Create a new counter record.
      */
     public function create(array $data);
 
     /**
-     * Update an existing employee job record by ID.
+     * Update an existing counter record by ID.
      */
     public function update($id, array $data);
 
     /**
-     * Delete an employee job record by ID.
+     * Delete an counter record by ID.
      */
     public function delete($id);
 }

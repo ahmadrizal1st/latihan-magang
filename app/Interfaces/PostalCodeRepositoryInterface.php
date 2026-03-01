@@ -2,30 +2,30 @@
 
 namespace App\Interfaces;
 
-interface EmployeeJobRepositoryInterface
+interface PostalCodeRepositoryInterface
 {
     /**
-     * Get all employee jobs with their related data.
+     * Get all postal codes with their related data.
      */
     public function getAll();
 
     /**
-     * Search employee jobs by name.
+     * Search postal codes by name.
      */
     public function search(string $keyword);
 
     /**
-     * Create a new employee job record.
+     * Create a new postal code record.
      */
     public function create(array $data);
 
     /**
-     * Update an existing employee job record by ID.
+     * Update an existing postal code record by ID.
      */
     public function update($id, array $data);
 
     /**
-     * Delete an employee job record by ID.
+     * Delete an postal code record by ID.
      */
     public function delete($id);
 }

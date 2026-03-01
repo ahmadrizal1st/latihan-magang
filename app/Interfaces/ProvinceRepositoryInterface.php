@@ -2,30 +2,30 @@
 
 namespace App\Interfaces;
 
-interface EmployeeJobRepositoryInterface
+interface ProvinceRepositoryInterface
 {
     /**
-     * Get all employee jobs with their related data.
+     * Get all provinces with their related data.
      */
     public function getAll();
 
     /**
-     * Search employee jobs by name.
+     * Search provinces by name or NIP.
      */
     public function search(string $keyword);
 
     /**
-     * Create a new employee job record.
+     * Create a new province record.
      */
     public function create(array $data);
 
     /**
-     * Update an existing employee job record by ID.
+     * Update an existing province record by ID.
      */
     public function update($id, array $data);
 
     /**
-     * Delete an employee job record by ID.
+     * Delete an province record by ID.
      */
     public function delete($id);
 }
