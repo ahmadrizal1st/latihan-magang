@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\EmployeeJob;
+namespace App\Http\Requests\Province;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateEmployeeJobRequest extends FormRequest
+class UpdateProvinceRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,25 +22,21 @@ class UpdateEmployeeJobRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255|unique:employee_jobs,name,' . $this->route('id'),
+            'name' => 'required|string|max:255|unique:provinces,name,' . $this->route('id'),
         ];
     }
 
-
     /**
-     * Custom validation error messages.
-     *
-     * This method should return an associative array with the rule name as
-     * the key and the error message as value.
+     * Return validation messages.
      *
      * @return array<string, string>
      */
     public function messages(): array
     {
         return [
-            'name.required' => 'Nama pekerjaan wajib diisi.',
-            'name.unique'   => 'Nama pekerjaan sudah terdaftar.',
-            'name.max'      => 'Nama pekerjaan maksimal 255 karakter.',
+            'name.required' => 'Nama provinsi wajib diisi.',
+            'name.unique'   => 'Nama provinsi sudah terdaftar.',
+            'name.max'      => 'Nama provinsi maksimal 255 karakter.',
         ];
     }
 }

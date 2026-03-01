@@ -26,6 +26,14 @@ class StoreEmployeeJobRequest extends FormRequest
         ];
     }
 
+    /**
+     * Custom validation error messages.
+     *
+     * This method should return an associative array with the rule name as
+     * the key and the error message as value.
+     *
+     * @return array
+     */
     public function messages(): array
     {
         return [

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\EmployeeJob;
+namespace App\Http\Requests\PostalCode;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateEmployeeJobRequest extends FormRequest
+class UpdatePostalCodeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,25 +22,21 @@ class UpdateEmployeeJobRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255|unique:employee_jobs,name,' . $this->route('id'),
+            'code'       => 'required|string|max:10|unique:postal_codes,code,' . $this->route('id'),
         ];
     }
 
-
     /**
-     * Custom validation error messages.
-     *
-     * This method should return an associative array with the rule name as
-     * the key and the error message as value.
+     * Return validation messages.
      *
      * @return array<string, string>
      */
     public function messages(): array
     {
         return [
-            'name.required' => 'Nama pekerjaan wajib diisi.',
-            'name.unique'   => 'Nama pekerjaan sudah terdaftar.',
-            'name.max'      => 'Nama pekerjaan maksimal 255 karakter.',
+            'code.required'       => 'Kode pos wajib diisi.',
+            'code.unique'         => 'Kode pos sudah terdaftar.',
+            'code.max'            => 'Kode pos maksimal 10 karakter.',
         ];
     }
 }
