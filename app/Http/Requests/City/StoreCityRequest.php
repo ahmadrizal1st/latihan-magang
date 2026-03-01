@@ -26,6 +26,11 @@ class StoreCityRequest extends FormRequest
         ];
     }
 
+    /**
+     * Return validation messages.
+     *
+     * @return array<string, string>
+     */
     public function messages(): array
     {
         return [

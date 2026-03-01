@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Employee Job')
-@section('page-title', 'Employee Job')
+@section('title', 'Job')
+@section('page-title', 'Job')
 @section('page-subtitle', 'Table')
 
 @section('breadcrumb')
@@ -15,10 +15,10 @@
             <div class="box">
 
                 <div class="box-header">
-                    <h3 class="box-title">Employee Job Data Table</h3>
+                    <h3 class="box-title">Job Data Table</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalCreateEmployeeJob">
-                            <i class="fa fa-plus"></i> Add Employee Job
+                            <i class="fa fa-plus"></i> Add Job
                         </button>
                     </div>
                 </div>
@@ -64,7 +64,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <h4 class="modal-title" id="modalCreateEmployeeJobLabel">
-                    <i class="fa fa-plus-circle"></i> Create Employee Job
+                    <i class="fa fa-plus-circle"></i> Create Job
                 </h4>
             </div>
             <form id="formCreateEmployeeJob" role="form">
@@ -162,7 +162,7 @@ $(function () {
         processing: true,
         serverSide: true,
         ajax: {
-            url: '/api/employee-job',
+            url: '/api/job',
             type: 'GET',
             data: function(d) {
                 d.datatable = true;
@@ -220,7 +220,7 @@ $(function () {
         $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Saving...');
 
         $.ajax({
-            url: '/api/employee-job',
+            url: '/api/job',
             type: 'POST',
             data: $(this).serialize(),
             success: function(response) {
@@ -257,7 +257,7 @@ $(function () {
         $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Updating...');
 
         $.ajax({
-            url: '/api/employee-job/' + id,
+            url: '/api/job/' + id,
             type: 'PUT',
             data: $(this).serialize(),
             success: function(response) {
@@ -291,7 +291,7 @@ $(function () {
         $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Deleting...');
 
         $.ajax({
-            url: '/api/employee-job/' + id,
+            url: '/api/job/' + id,
             type: 'DELETE',
             success: function(response) {
                 $('#modalDeleteEmployeeJob').modal('hide');

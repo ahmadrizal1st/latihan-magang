@@ -11,43 +11,54 @@ use Yajra\DataTables\Facades\DataTables;
 
 class CityController extends Controller
 {
+
     public function __construct(
         private CityRepositoryInterface $cityRepository
     ) {}
 
+    /**
+     * Display a listing of the resource.
+     */
     public function index(Request $request)
     {
-        // Jika ada parameter datatable → request dari DataTables
         if ($request->has('datatable')) {
             $cities = $this->cityRepository->getAll();
 
             return DataTables::of($cities)
                 ->addIndexColumn()
-                ->addColumn('employees', function ($city) {
-                    return $city->employees->toArray();
-                })
+                ->addColumn('province_name',   fn($c) => $c->province?->name ?? '-')
+                ->addColumn('province_id',     fn($c) => $c->province_id)
+                ->addColumn('districts_count', fn($c) => $c->districts_count)
+                ->addColumn('villages_count',  fn($c) => $c->villages_count)
+                ->addColumn('employees_count', fn($c) => $c->employees_count)
                 ->toJson();
         }
 
-        // Jika ada parameter search → request dari Select2 AJAX
+        $keyword = '';
         if ($request->has('search')) {
             $keyword = is_array($request->search)
                 ? $request->search['term'] ?? ''
                 : $request->search ?? '';
-
-            $cities = $this->cityRepository->search($keyword);
-
-            return response()->json([
-                'results' => $cities->map(fn($city) => [
-                    'id'   => $city->id,
-                    'text' => $city->name,
-                ])
-            ]);
         }
 
-        return response()->json(['results' => []]);
+        $provinceId = $request->province_id ?? null;
+
+        $cities = $this->cityRepository->search($keyword, $provinceId);
+
+        return response()->json([
+            'results' => $cities->map(fn($city) => [
+                'id'   => $city->id,
+                'text' => $city->name,
+            ]),
+            'pagination' => [
+                'more' => false
+            ]
+        ]);
     }
 
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(StoreCityRequest $request)
     {
         $city = $this->cityRepository->create($request->validated());
@@ -59,6 +70,9 @@ class CityController extends Controller
         ], 201);
     }
 
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(UpdateCityRequest $request, $id)
     {
         $city = $this->cityRepository->update($id, $request->validated());
@@ -70,6 +84,9 @@ class CityController extends Controller
         ]);
     }
 
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy($id)
     {
         $this->cityRepository->delete($id);

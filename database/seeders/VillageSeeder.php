@@ -30,8 +30,12 @@ class VillageSeeder extends Seeder
         $bar->start();
 
         foreach ($districts as $district) {
-            $response = Http::timeout(60)          // timeout 60 detik
-                            ->retry(3, 2000)        // retry 3x, jeda 2 detik tiap retry
+            if (Village::where('district_id', $district->id)->exists()) {
+                $bar->advance();
+                continue;
+            }
+            $response = Http::timeout(60)
+                            ->retry(3, 2000)
                             ->get("{$this->baseUrl}/villages/{$district->id}.json");
 
             if ($response->failed()) {
@@ -53,7 +57,10 @@ class VillageSeeder extends Seeder
                 'district_id' => $district->id,
                 'created_at'  => now(),
                 'updated_at'  => now(),
-            ])->toArray();
+            ])
+            ->unique('id')
+            ->values()
+            ->toArray();
 
             foreach (array_chunk($villageData, 100) as $chunk) {
                 Village::upsert($chunk, ['id'], ['name', 'district_id', 'updated_at']);

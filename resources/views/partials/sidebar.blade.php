@@ -32,16 +32,59 @@
           </a>
         </li>
         <li>
-          <a href="{{ url("city") }}">
-            <i class="fa fa-table"></i> <span>City</span>
-          </a>
-        </li>
-        <li>
-          <a href="{{ url("employee-job") }}">
+          <a href="{{ url("job") }}">
             <i class="fa fa-table"></i> <span>Job</span>
           </a>
+
+        <li class="header">WILAYAH</li>
+          <li>
+            <a href="{{ url("province") }}">
+              <i class="fa fa-table"></i>
+              Provinsi
+            </a>
+          </li>
+          <li>
+            <a href="{{ url("city") }}">
+              <i class="fa fa-table"></i>
+              Kota/Kabupaten
+            </a>
+          </li>
+          <li>
+            <a href="{{ url("district") }}">
+              <i class="fa fa-table"></i>
+              Kecamatan
+            </a>
+          </li>
+          <li>
+            <a href="{{ url("village") }}">
+              <i class="fa fa-table"></i>
+              Kelurahan
+            </a>
+          </li>
+          <li>
+            <a href="{{ url("postal-code") }}">
+              <i class="fa fa-table"></i>
+              Kode Pos
+            </a>
+          </li>
         </li>
+      </li>
       </ul>
     </section>
     <!-- /.sidebar -->
   </aside>
+
+  @pushOnce('scripts')
+<script>
+$(document).ready(function () {
+    var currentUrl = window.location.href;
+
+    $('.sidebar-menu li a').each(function () {
+        var linkUrl = $(this).attr('href');
+        if (linkUrl && linkUrl !== '#' && currentUrl.startsWith(linkUrl)) {
+            $(this).closest('li').addClass('active');
+        }
+    });
+});
+</script>
+@endPushOnce

@@ -5,40 +5,71 @@ namespace App\Repositories;
 use App\Interfaces\EmployeeRepositoryInterface;
 use App\Models\Employee;
 
-
 class EmployeeRepository implements EmployeeRepositoryInterface
 {
     public function __construct(
         private Employee $model
     ) {}
 
+    /**
+     * Get all employees with their related data.
+     */
     public function getAll()
     {
-        /** 
-         * Penggunaan relasi menggunakan with() mengatasi n+1 problem
-         * Method select() digunakan untuk memilih semua kolom untuk penerapan yajra datatables
-         * Yajra bisa tambahkan WHERE, LIMIT, ORDER BY, dll
-         * Hasil: Builder (query belum dieksekusi)
-         * Hanya mendefinisikan "ambil semua kolom dari tabel employees"
-         * 
-         * Jika menggunakan get()
-         * Bisa jalan tapi tidak efisien, karena semua data sudah di-load
-         * Yajra filter di PHP bukan di database
-         */
-        return Employee::with(['city', 'employeeJob']);
+        return $this->model->with([
+            'employeeJob',
+            'province',
+            'city',
+            'district',
+            'village',
+            'postalCode',
+        ]);
     }
 
-    public function create(array $data){
+    /**
+     * Find by id employees with their related data.
+     */
+    public function findById($id)
+    {
+        return $this->model->findOrFail($id);
+    }
+
+    /**
+     * Search employees by name or NIP.
+     */
+    public function search(string $keyword)
+    {
+        return Employee::whereLike('name', "%{$keyword}%")
+            ->orWhereLike('nip', "%{$keyword}%")
+            ->select('id', 'name', 'nip', 'job_id')
+            ->with('employeeJob')
+            ->orderBy('name')
+            ->get();
+    }
+
+    /**
+     * Create a new employee record.
+     */
+    public function create(array $data)
+    {
         return $this->model->create($data);
     }
 
-    public function update($id, array $data){
+    /**
+     * Update an existing employee record by ID.
+     */
+    public function update($id, array $data)
+    {
         $employee = $this->model->findOrFail($id);
         $employee->update($data);
         return $employee;
     }
 
-    public function delete($id){
+    /**
+     * Delete an employee record by ID.
+     */
+    public function delete($id)
+    {
         return $this->model->destroy($id);
     }
 }
