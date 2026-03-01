@@ -1,11 +1,11 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Job')
-@section('page-title', 'Job')
+@section('title', 'Counter')
+@section('page-title', 'Counter')
 @section('page-subtitle', 'Table')
 
 @section('breadcrumb')
-    <li class="active">Employee Job</li>
+    <li class="active">Counter</li>
 @endsection
 
 @section('content')
@@ -15,10 +15,10 @@
             <div class="box">
 
                 <div class="box-header">
-                    <h3 class="box-title">Job Data Table</h3>
+                    <h3 class="box-title">Counter Data Table</h3>
                     <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalCreateEmployeeJob">
-                            <i class="fa fa-plus"></i> Add Job
+                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalCreateCounter">
+                            <i class="fa fa-plus"></i> Add Counter
                         </button>
                     </div>
                 </div>
@@ -27,51 +27,55 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Name</th>
-                                <th>Employee</th>
+                                <th>Code</th>
+                                <th>Description</th>
+                                <th>Counter</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody id="employee-job-table-body">
-                            {{-- Diisi oleh AJAX sebelum DataTable diinisialisasi --}}
-                        </tbody>
+                        <tbody></tbody>
                         <tfoot>
                             <tr>
                                 <th>No</th>
-                                <th>Name</th>
-                                <th>Employee</th>
+                                <th>Code</th>
+                                <th>Description</th>
+                                <th>Counter</th>
                                 <th>Action</th>
                             </tr>
                         </tfoot>
                     </table>
                 </div>
-                {{-- /.box-body --}}
 
             </div>
-            {{-- /.box --}}
         </div>
-        {{-- /.col --}}
     </div>
-    {{-- /.row --}}
 </section>
 
-{{-- Modal Create Employee Job --}}
-<div class="modal fade" id="modalCreateEmployeeJob" tabindex="-1" role="dialog" aria-labelledby="modalCreateEmployeeJobLabel">
+{{-- Modal Create Counter --}}
+<div class="modal fade" id="modalCreateCounter" tabindex="-1" role="dialog" aria-labelledby="modalCreateCounterLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="modalCreateEmployeeJobLabel">
-                    <i class="fa fa-plus-circle"></i> Create Job
+                <h4 class="modal-title" id="modalCreateCounterLabel">
+                    <i class="fa fa-plus-circle"></i> Create Counter
                 </h4>
             </div>
-            <form id="formCreateEmployeeJob" role="form">
+            <form id="formCreateCounter" role="form">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="jobName">Job Name <span class="text-red">*</span></label>
-                        <input type="text" class="form-control" id="jobName" name="name" placeholder="Enter job name...">
+                        <label for="counterCode">Code <span class="text-red">*</span></label>
+                        <input type="text" class="form-control" id="counterCode" name="code" placeholder="Enter counter code...">
+                    </div>
+                    <div class="form-group">
+                        <label for="counterDescription">Description</label>
+                        <input type="text" class="form-control" id="counterDescription" name="description" placeholder="Enter description...">
+                    </div>
+                    <div class="form-group">
+                        <label for="counterValue">Counter <span class="text-red">*</span></label>
+                        <input type="number" class="form-control" id="counterValue" name="counter" placeholder="0" min="0" value="0">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -86,26 +90,33 @@
         </div>
     </div>
 </div>
-{{-- /.modal --}}
 
-{{-- Modal Edit Employee Job --}}
-<div class="modal fade" id="modalEditEmployeeJob" tabindex="-1" role="dialog" aria-labelledby="modalEditEmployeeJobLabel">
+{{-- Modal Edit Counter --}}
+<div class="modal fade" id="modalEditCounter" tabindex="-1" role="dialog" aria-labelledby="modalEditCounterLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="modalEditEmployeeJobLabel">
-                    <i class="fa fa-pencil"></i> Edit Employee Job
+                <h4 class="modal-title" id="modalEditCounterLabel">
+                    <i class="fa fa-pencil"></i> Edit Counter
                 </h4>
             </div>
-            <form id="formEditEmployeeJob" role="form">
-                <input type="hidden" id="editJobId" name="id">
+            <form id="formEditCounter" role="form">
+                <input type="hidden" id="editCounterId" name="id">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="editJobName">Job Name <span class="text-red">*</span></label>
-                        <input type="text" class="form-control" id="editJobName" name="name" placeholder="Enter job name...">
+                        <label for="editCounterCode">Code <span class="text-red">*</span></label>
+                        <input type="text" class="form-control" id="editCounterCode" name="code" placeholder="Enter counter code...">
+                    </div>
+                    <div class="form-group">
+                        <label for="editCounterDescription">Description</label>
+                        <input type="text" class="form-control" id="editCounterDescription" name="description" placeholder="Enter description...">
+                    </div>
+                    <div class="form-group">
+                        <label for="editCounterValue">Counter <span class="text-red">*</span></label>
+                        <input type="number" class="form-control" id="editCounterValue" name="counter" placeholder="0" min="0">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -120,49 +131,46 @@
         </div>
     </div>
 </div>
-{{-- /.modal --}}
 
 {{-- Modal Confirm Delete --}}
-<div class="modal fade" id="modalDeleteEmployeeJob" tabindex="-1" role="dialog" aria-labelledby="modalDeleteEmployeeJobLabel">
+<div class="modal fade" id="modalDeleteCounter" tabindex="-1" role="dialog" aria-labelledby="modalDeleteCounterLabel">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header" style="background-color: #dd4b39; color: #fff;">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true" style="color:#fff;">&times;</span>
                 </button>
-                <h4 class="modal-title" id="modalDeleteEmployeeJobLabel">
+                <h4 class="modal-title" id="modalDeleteCounterLabel">
                     <i class="fa fa-trash"></i> Confirm Delete
                 </h4>
             </div>
             <div class="modal-body">
-                <p>Are you sure you want to delete <strong id="deleteJobName"></strong>?</p>
+                <p>Are you sure you want to delete counter <strong id="deleteCounterCode"></strong>?</p>
                 <p class="text-muted"><small>This action cannot be undone.</small></p>
             </div>
             <div class="modal-footer">
-                <input type="hidden" id="deleteJobId">
+                <input type="hidden" id="deleteCounterId">
                 <button type="button" class="btn btn-default" data-dismiss="modal">
                     <i class="fa fa-times"></i> Cancel
                 </button>
-                <button type="button" class="btn btn-danger" id="btnConfirmDelete">
+                <button type="button" class="btn btn-danger" id="btnConfirmDeleteCounter">
                     <i class="fa fa-trash"></i> Delete
                 </button>
             </div>
         </div>
     </div>
 </div>
-{{-- /.modal --}}
 
 @endsection
 
 @pushOnce('scripts')
 <script>
 $(function () {
-    // Initialize DataTable
     var table = $('#example1').DataTable({
         processing: true,
         serverSide: true,
         ajax: {
-            url: '/api/job',
+            url: '/api/counter',
             type: 'GET',
             data: function(d) {
                 d.datatable = true;
@@ -170,25 +178,16 @@ $(function () {
             }
         },
         columns: [
+            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+            { data: 'code', name: 'code' },
             {
-                data: 'DT_RowIndex',
-                name: 'DT_RowIndex',
-                orderable: false,
-                searchable: false
-            },
-            {
-                data: 'name',
-                name: 'name'
-            },
-            {
-                data: 'employees',
-                orderable: false,
-                searchable: false,
+                data: 'description',
+                name: 'description',
                 render: function(data) {
-                    if (!data || !Array.isArray(data)) return 0;
-                    return data.length;
+                    return data ?? '-';
                 }
             },
+            { data: 'counter', name: 'counter' },
             {
                 data: 'id',
                 orderable: false,
@@ -197,13 +196,14 @@ $(function () {
                     return `
                         <button class="btn btn-warning btn-xs btn-edit"
                             data-id="${data}"
-                            data-name="${row.name}"
-                            data-description="${row.description ?? ''}">
+                            data-code="${row.code}"
+                            data-description="${row.description ?? ''}"
+                            data-counter="${row.counter}">
                             <i class="fa fa-pencil"></i> Edit
                         </button>
                         <button class="btn btn-danger btn-xs btn-delete"
                             data-id="${data}"
-                            data-name="${row.name}">
+                            data-code="${row.code}">
                             <i class="fa fa-trash"></i> Delete
                         </button>
                     `;
@@ -213,22 +213,21 @@ $(function () {
     });
 
     // CREATE
-    $('#formCreateEmployeeJob').on('submit', function(e) {
+    $('#formCreateCounter').on('submit', function(e) {
         e.preventDefault();
-
         var $btn = $(this).find('[type="submit"]');
         $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Saving...');
 
         $.ajax({
-            url: '/api/job',
+            url: '/api/counter',
             type: 'POST',
             data: $(this).serialize(),
-            success: function(response) {
-                $('#modalCreateEmployeeJob').modal('hide');
+            success: function() {
+                $('#modalCreateCounter').modal('hide');
                 table.ajax.reload();
             },
             error: function(xhr) {
-                handleValidationErrors(xhr, '#formCreateEmployeeJob');
+                handleValidationErrors(xhr, '#formCreateCounter');
             },
             complete: function() {
                 $btn.prop('disabled', false).html('<i class="fa fa-save"></i> Save');
@@ -238,34 +237,30 @@ $(function () {
 
     // OPEN EDIT MODAL
     $('#example1').on('click', '.btn-edit', function() {
-        var id          = $(this).data('id');
-        var name        = $(this).data('name');
-        var description = $(this).data('description');
-
-        $('#editJobId').val(id);
-        $('#editJobName').val(name);
-
-        $('#modalEditEmployeeJob').modal('show');
+        $('#editCounterId').val($(this).data('id'));
+        $('#editCounterCode').val($(this).data('code'));
+        $('#editCounterDescription').val($(this).data('description'));
+        $('#editCounterValue').val($(this).data('counter'));
+        $('#modalEditCounter').modal('show');
     });
 
     // EDIT SUBMIT
-    $('#formEditEmployeeJob').on('submit', function(e) {
+    $('#formEditCounter').on('submit', function(e) {
         e.preventDefault();
-
-        var id   = $('#editJobId').val();
+        var id   = $('#editCounterId').val();
         var $btn = $(this).find('[type="submit"]');
         $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Updating...');
 
         $.ajax({
-            url: '/api/job/' + id,
+            url: '/api/counter/' + id,
             type: 'PUT',
             data: $(this).serialize(),
-            success: function(response) {
-                $('#modalEditEmployeeJob').modal('hide');
+            success: function() {
+                $('#modalEditCounter').modal('hide');
                 table.ajax.reload(null, false);
             },
             error: function(xhr) {
-                handleValidationErrors(xhr, '#formEditEmployeeJob');
+                handleValidationErrors(xhr, '#formEditCounter');
             },
             complete: function() {
                 $btn.prop('disabled', false).html('<i class="fa fa-save"></i> Update');
@@ -275,29 +270,25 @@ $(function () {
 
     // OPEN DELETE MODAL
     $('#example1').on('click', '.btn-delete', function() {
-        var id   = $(this).data('id');
-        var name = $(this).data('name');
-
-        $('#deleteJobId').val(id);
-        $('#deleteJobName').text(name);
-
-        $('#modalDeleteEmployeeJob').modal('show');
+        $('#deleteCounterId').val($(this).data('id'));
+        $('#deleteCounterCode').text($(this).data('code'));
+        $('#modalDeleteCounter').modal('show');
     });
 
     // CONFIRM DELETE
-    $('#btnConfirmDelete').on('click', function() {
-        var id   = $('#deleteJobId').val();
+    $('#btnConfirmDeleteCounter').on('click', function() {
+        var id   = $('#deleteCounterId').val();
         var $btn = $(this);
         $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Deleting...');
 
         $.ajax({
-            url: '/api/job/' + id,
+            url: '/api/counter/' + id,
             type: 'DELETE',
-            success: function(response) {
-                $('#modalDeleteEmployeeJob').modal('hide');
+            success: function() {
+                $('#modalDeleteCounter').modal('hide');
                 table.ajax.reload(null, false);
             },
-            error: function(xhr) {
+            error: function() {
                 alert('Failed to delete. Please try again.');
             },
             complete: function() {
@@ -307,17 +298,15 @@ $(function () {
     });
 
     // RESET MODALS ON CLOSE
-    $('#modalCreateEmployeeJob, #modalEditEmployeeJob').on('hidden.bs.modal', function() {
+    $('#modalCreateCounter, #modalEditCounter').on('hidden.bs.modal', function() {
         $(this).find('form')[0].reset();
         $(this).find('.form-group').removeClass('has-error');
         $(this).find('.help-block.error-msg').remove();
     });
 
-    // HELPER: Validation Errors
     function handleValidationErrors(xhr, formSelector) {
         $(formSelector + ' .form-group').removeClass('has-error');
         $(formSelector + ' .help-block.error-msg').remove();
-
         var errors = xhr.responseJSON?.errors;
         if (errors) {
             $.each(errors, function(field, messages) {

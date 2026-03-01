@@ -1,11 +1,11 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Job')
-@section('page-title', 'Job')
+@section('title', 'Province')
+@section('page-title', 'Province')
 @section('page-subtitle', 'Table')
 
 @section('breadcrumb')
-    <li class="active">Employee Job</li>
+    <li class="active">Province</li>
 @endsection
 
 @section('content')
@@ -15,10 +15,10 @@
             <div class="box">
 
                 <div class="box-header">
-                    <h3 class="box-title">Job Data Table</h3>
+                    <h3 class="box-title">Province Data Table</h3>
                     <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalCreateEmployeeJob">
-                            <i class="fa fa-plus"></i> Add Job
+                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalCreateProvince">
+                            <i class="fa fa-plus"></i> Add Province
                         </button>
                     </div>
                 </div>
@@ -28,50 +28,50 @@
                             <tr>
                                 <th>No</th>
                                 <th>Name</th>
-                                <th>Employee</th>
+                                <th>Cities</th>
+                                <th>Districts</th>
+                                <th>Villages</th>
+                                <th>Employees</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody id="employee-job-table-body">
-                            {{-- Diisi oleh AJAX sebelum DataTable diinisialisasi --}}
-                        </tbody>
+                        <tbody></tbody>
                         <tfoot>
                             <tr>
                                 <th>No</th>
                                 <th>Name</th>
-                                <th>Employee</th>
+                                <th>Cities</th>
+                                <th>Districts</th>
+                                <th>Villages</th>
+                                <th>Employees</th>
                                 <th>Action</th>
                             </tr>
                         </tfoot>
                     </table>
                 </div>
-                {{-- /.box-body --}}
 
             </div>
-            {{-- /.box --}}
         </div>
-        {{-- /.col --}}
     </div>
-    {{-- /.row --}}
 </section>
 
-{{-- Modal Create Employee Job --}}
-<div class="modal fade" id="modalCreateEmployeeJob" tabindex="-1" role="dialog" aria-labelledby="modalCreateEmployeeJobLabel">
+{{-- Modal Create Province --}}
+<div class="modal fade" id="modalCreateProvince" tabindex="-1" role="dialog" aria-labelledby="modalCreateProvinceLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="modalCreateEmployeeJobLabel">
-                    <i class="fa fa-plus-circle"></i> Create Job
+                <h4 class="modal-title" id="modalCreateProvinceLabel">
+                    <i class="fa fa-plus-circle"></i> Create Province
                 </h4>
             </div>
-            <form id="formCreateEmployeeJob" role="form">
+            <form id="formCreateProvince" role="form">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="jobName">Job Name <span class="text-red">*</span></label>
-                        <input type="text" class="form-control" id="jobName" name="name" placeholder="Enter job name...">
+                        <label for="provinceName">Province Name <span class="text-red">*</span></label>
+                        <input type="text" class="form-control" id="provinceName" name="name" placeholder="Enter province name...">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -86,26 +86,25 @@
         </div>
     </div>
 </div>
-{{-- /.modal --}}
 
-{{-- Modal Edit Employee Job --}}
-<div class="modal fade" id="modalEditEmployeeJob" tabindex="-1" role="dialog" aria-labelledby="modalEditEmployeeJobLabel">
+{{-- Modal Edit Province --}}
+<div class="modal fade" id="modalEditProvince" tabindex="-1" role="dialog" aria-labelledby="modalEditProvinceLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="modalEditEmployeeJobLabel">
-                    <i class="fa fa-pencil"></i> Edit Employee Job
+                <h4 class="modal-title" id="modalEditProvinceLabel">
+                    <i class="fa fa-pencil"></i> Edit Province
                 </h4>
             </div>
-            <form id="formEditEmployeeJob" role="form">
-                <input type="hidden" id="editJobId" name="id">
+            <form id="formEditProvince" role="form">
+                <input type="hidden" id="editProvinceId" name="id">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="editJobName">Job Name <span class="text-red">*</span></label>
-                        <input type="text" class="form-control" id="editJobName" name="name" placeholder="Enter job name...">
+                        <label for="editProvinceName">Province Name <span class="text-red">*</span></label>
+                        <input type="text" class="form-control" id="editProvinceName" name="name" placeholder="Enter province name...">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -120,49 +119,46 @@
         </div>
     </div>
 </div>
-{{-- /.modal --}}
 
 {{-- Modal Confirm Delete --}}
-<div class="modal fade" id="modalDeleteEmployeeJob" tabindex="-1" role="dialog" aria-labelledby="modalDeleteEmployeeJobLabel">
+<div class="modal fade" id="modalDeleteProvince" tabindex="-1" role="dialog" aria-labelledby="modalDeleteProvinceLabel">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header" style="background-color: #dd4b39; color: #fff;">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true" style="color:#fff;">&times;</span>
                 </button>
-                <h4 class="modal-title" id="modalDeleteEmployeeJobLabel">
+                <h4 class="modal-title" id="modalDeleteProvinceLabel">
                     <i class="fa fa-trash"></i> Confirm Delete
                 </h4>
             </div>
             <div class="modal-body">
-                <p>Are you sure you want to delete <strong id="deleteJobName"></strong>?</p>
+                <p>Are you sure you want to delete <strong id="deleteProvinceName"></strong>?</p>
                 <p class="text-muted"><small>This action cannot be undone.</small></p>
             </div>
             <div class="modal-footer">
-                <input type="hidden" id="deleteJobId">
+                <input type="hidden" id="deleteProvinceId">
                 <button type="button" class="btn btn-default" data-dismiss="modal">
                     <i class="fa fa-times"></i> Cancel
                 </button>
-                <button type="button" class="btn btn-danger" id="btnConfirmDelete">
+                <button type="button" class="btn btn-danger" id="btnConfirmDeleteProvince">
                     <i class="fa fa-trash"></i> Delete
                 </button>
             </div>
         </div>
     </div>
 </div>
-{{-- /.modal --}}
 
 @endsection
 
 @pushOnce('scripts')
 <script>
 $(function () {
-    // Initialize DataTable
     var table = $('#example1').DataTable({
         processing: true,
         serverSide: true,
         ajax: {
-            url: '/api/job',
+            url: '/api/province',
             type: 'GET',
             data: function(d) {
                 d.datatable = true;
@@ -170,25 +166,12 @@ $(function () {
             }
         },
         columns: [
-            {
-                data: 'DT_RowIndex',
-                name: 'DT_RowIndex',
-                orderable: false,
-                searchable: false
-            },
-            {
-                data: 'name',
-                name: 'name'
-            },
-            {
-                data: 'employees',
-                orderable: false,
-                searchable: false,
-                render: function(data) {
-                    if (!data || !Array.isArray(data)) return 0;
-                    return data.length;
-                }
-            },
+            { data: 'DT_RowIndex',      name: 'DT_RowIndex', orderable: false, searchable: false },
+            { data: 'name',             name: 'name' },
+            { data: 'cities_count',     name: 'cities_count',     searchable: false },
+            { data: 'districts_count',  name: 'districts_count',  searchable: false },
+            { data: 'villages_count',   name: 'villages_count',   searchable: false },
+            { data: 'employees_count',  name: 'employees_count',  searchable: false },
             {
                 data: 'id',
                 orderable: false,
@@ -197,8 +180,7 @@ $(function () {
                     return `
                         <button class="btn btn-warning btn-xs btn-edit"
                             data-id="${data}"
-                            data-name="${row.name}"
-                            data-description="${row.description ?? ''}">
+                            data-name="${row.name}">
                             <i class="fa fa-pencil"></i> Edit
                         </button>
                         <button class="btn btn-danger btn-xs btn-delete"
@@ -213,22 +195,21 @@ $(function () {
     });
 
     // CREATE
-    $('#formCreateEmployeeJob').on('submit', function(e) {
+    $('#formCreateProvince').on('submit', function(e) {
         e.preventDefault();
-
         var $btn = $(this).find('[type="submit"]');
         $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Saving...');
 
         $.ajax({
-            url: '/api/job',
+            url: '/api/province',
             type: 'POST',
             data: $(this).serialize(),
-            success: function(response) {
-                $('#modalCreateEmployeeJob').modal('hide');
+            success: function() {
+                $('#modalCreateProvince').modal('hide');
                 table.ajax.reload();
             },
             error: function(xhr) {
-                handleValidationErrors(xhr, '#formCreateEmployeeJob');
+                handleValidationErrors(xhr, '#formCreateProvince');
             },
             complete: function() {
                 $btn.prop('disabled', false).html('<i class="fa fa-save"></i> Save');
@@ -238,34 +219,28 @@ $(function () {
 
     // OPEN EDIT MODAL
     $('#example1').on('click', '.btn-edit', function() {
-        var id          = $(this).data('id');
-        var name        = $(this).data('name');
-        var description = $(this).data('description');
-
-        $('#editJobId').val(id);
-        $('#editJobName').val(name);
-
-        $('#modalEditEmployeeJob').modal('show');
+        $('#editProvinceId').val($(this).data('id'));
+        $('#editProvinceName').val($(this).data('name'));
+        $('#modalEditProvince').modal('show');
     });
 
     // EDIT SUBMIT
-    $('#formEditEmployeeJob').on('submit', function(e) {
+    $('#formEditProvince').on('submit', function(e) {
         e.preventDefault();
-
-        var id   = $('#editJobId').val();
+        var id   = $('#editProvinceId').val();
         var $btn = $(this).find('[type="submit"]');
         $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Updating...');
 
         $.ajax({
-            url: '/api/job/' + id,
+            url: '/api/province/' + id,
             type: 'PUT',
             data: $(this).serialize(),
-            success: function(response) {
-                $('#modalEditEmployeeJob').modal('hide');
+            success: function() {
+                $('#modalEditProvince').modal('hide');
                 table.ajax.reload(null, false);
             },
             error: function(xhr) {
-                handleValidationErrors(xhr, '#formEditEmployeeJob');
+                handleValidationErrors(xhr, '#formEditProvince');
             },
             complete: function() {
                 $btn.prop('disabled', false).html('<i class="fa fa-save"></i> Update');
@@ -275,29 +250,25 @@ $(function () {
 
     // OPEN DELETE MODAL
     $('#example1').on('click', '.btn-delete', function() {
-        var id   = $(this).data('id');
-        var name = $(this).data('name');
-
-        $('#deleteJobId').val(id);
-        $('#deleteJobName').text(name);
-
-        $('#modalDeleteEmployeeJob').modal('show');
+        $('#deleteProvinceId').val($(this).data('id'));
+        $('#deleteProvinceName').text($(this).data('name'));
+        $('#modalDeleteProvince').modal('show');
     });
 
     // CONFIRM DELETE
-    $('#btnConfirmDelete').on('click', function() {
-        var id   = $('#deleteJobId').val();
+    $('#btnConfirmDeleteProvince').on('click', function() {
+        var id   = $('#deleteProvinceId').val();
         var $btn = $(this);
         $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Deleting...');
 
         $.ajax({
-            url: '/api/job/' + id,
+            url: '/api/province/' + id,
             type: 'DELETE',
-            success: function(response) {
-                $('#modalDeleteEmployeeJob').modal('hide');
+            success: function() {
+                $('#modalDeleteProvince').modal('hide');
                 table.ajax.reload(null, false);
             },
-            error: function(xhr) {
+            error: function() {
                 alert('Failed to delete. Please try again.');
             },
             complete: function() {
@@ -307,17 +278,15 @@ $(function () {
     });
 
     // RESET MODALS ON CLOSE
-    $('#modalCreateEmployeeJob, #modalEditEmployeeJob').on('hidden.bs.modal', function() {
+    $('#modalCreateProvince, #modalEditProvince').on('hidden.bs.modal', function() {
         $(this).find('form')[0].reset();
         $(this).find('.form-group').removeClass('has-error');
         $(this).find('.help-block.error-msg').remove();
     });
 
-    // HELPER: Validation Errors
     function handleValidationErrors(xhr, formSelector) {
         $(formSelector + ' .form-group').removeClass('has-error');
         $(formSelector + ' .help-block.error-msg').remove();
-
         var errors = xhr.responseJSON?.errors;
         if (errors) {
             $.each(errors, function(field, messages) {
