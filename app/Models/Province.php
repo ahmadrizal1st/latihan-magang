@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 class Province extends Model
 {
+    use HasRelationships;
+    
     protected $fillable = ['name'];
 
     /**
