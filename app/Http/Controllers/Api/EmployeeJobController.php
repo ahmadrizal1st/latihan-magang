@@ -15,9 +15,11 @@ class EmployeeJobController extends Controller
         private EmployeeJobRepositoryInterface $employeeJobRepository
     ) {}
 
+    /**
+     * Display a listing of the resource.
+     */
     public function index(Request $request)
     {
-        // Jika ada parameter datatable → request dari DataTables
         if ($request->has('datatable')) {
             $employeeJobs = $this->employeeJobRepository->getAll();
 
@@ -29,7 +31,6 @@ class EmployeeJobController extends Controller
                 ->toJson();
         }
 
-        // Jika ada parameter search → request dari Select2 AJAX
         if ($request->has('search')) {
             $keyword = is_array($request->search)
                 ? $request->search['term'] ?? ''
@@ -48,6 +49,9 @@ class EmployeeJobController extends Controller
         return response()->json(['results' => []]);
     }
 
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(StoreEmployeeJobRequest $request)
     {
         $employeeJob = $this->employeeJobRepository->create($request->validated());
@@ -59,6 +63,9 @@ class EmployeeJobController extends Controller
         ], 201);
     }
 
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(UpdateEmployeeJobRequest $request, $id)
     {
         $employeeJob = $this->employeeJobRepository->update($id, $request->validated());
@@ -70,6 +77,9 @@ class EmployeeJobController extends Controller
         ]);
     }
 
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy($id)
     {
         $this->employeeJobRepository->delete($id);

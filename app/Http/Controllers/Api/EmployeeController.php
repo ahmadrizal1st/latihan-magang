@@ -28,12 +28,12 @@ class EmployeeController extends Controller
 
             return DataTables::of($employees)
                 ->addIndexColumn()
-                ->addColumn('province', fn($employee): string => $employee->province->name ?? '-')
-                ->addColumn('city', fn($employee): string => $employee->city->name ?? '-')
-                ->addColumn('district', fn($employee): string => $employee->district->name ?? '-')
-                ->addColumn('village', fn($employee): string => $employee->village->name ?? '-')
-                ->addColumn('postal_code', fn($employee): string => $employee->postalCode->code ?? '-')
-                ->addColumn('employee_job', fn($employee): string => $employee->employeeJob->name ?? '-')
+                ->addColumn('employee_job_name', fn($employee): string => $employee->employeeJob->name ?? '-')
+                ->addColumn('province_name', fn($employee): string => $employee->province->name ?? '-')
+                ->addColumn('city_name', fn($employee): string => $employee->city->name ?? '-')
+                ->addColumn('district_name', fn($employee): string => $employee->district->name ?? '-')
+                ->addColumn('village_name', fn($employee): string => $employee->village->name ?? '-')
+                ->addColumn('postal_code_name', fn($employee): string => $employee->postalCode->name ?? '-')
                 ->addColumn('photo_url', fn($employee): string => $employee->photo
                     ? Storage::url($employee->photo)
                     : asset('images/default-avatar.png')
@@ -66,7 +66,6 @@ class EmployeeController extends Controller
     {
         $data = $request->validated();
 
-        // Generate NIP otomatis dari tanggal lahir
         $data['nip'] = $this->nipService->generate($data['date_of_birth']);
 
         if ($request->hasFile('photo')) {
@@ -87,7 +86,22 @@ class EmployeeController extends Controller
      */
     public function update(UpdateEmployeeRequest $request, $id)
     {
-        $employee = $this->employeeRepository->update($id, $request->validated());
+        $data = $request->validated();
+
+        $employee = $this->employeeRepository->findById($id);
+
+        if (empty($employee->nip) && !empty($data['date_of_birth'])) {
+            $data['nip'] = $this->nipService->generate($data['date_of_birth']);
+        }
+
+        if ($request->hasFile('photo')) {
+            if ($employee->photo) {
+                Storage::disk('public')->delete($employee->photo);
+            }
+            $data['photo'] = $request->file('photo')->store('employees/photos', 'public');
+        }
+
+        $employee = $this->employeeRepository->update($id, $data);
 
         return response()->json([
             'success' => true,
@@ -101,6 +115,12 @@ class EmployeeController extends Controller
      */
     public function destroy($id)
     {
+        $employee = $this->employeeRepository->findById($id);
+
+        if ($employee->photo) {
+            Storage::disk('public')->delete($employee->photo);
+        }
+
         $this->employeeRepository->delete($id);
 
         return response()->json([
