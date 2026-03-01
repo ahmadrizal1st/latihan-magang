@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="{{ asset('adminlte/bower_components/bootstrap/dist/css/bootstrap.min.css') }}">
   <link rel="stylesheet" href="{{ asset('adminlte/bower_components/font-awesome/css/font-awesome.min.css') }}">
   <link rel="stylesheet" href="{{ asset('adminlte/bower_components/Ionicons/css/ionicons.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('adminlte/bower_components/select2/dist/css/select2.min.css') }}">
   <link rel="stylesheet" href="{{ asset('adminlte/dist/css/AdminLTE.min.css') }}">
   <link rel="stylesheet" href="{{ asset('adminlte/dist/css/skins/_all-skins.min.css') }}">
   <link rel="stylesheet" href="{{ asset('adminlte/bower_components/morris.js/morris.css') }}">
@@ -16,8 +17,11 @@
   <link rel="stylesheet" href="{{ asset('adminlte/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}">
   <link rel="stylesheet" href="{{ asset('adminlte/bower_components/bootstrap-daterangepicker/daterangepicker.css') }}">
   <link rel="stylesheet" href="{{ asset('adminlte/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('adminlte/bower_components/select2/dist/css/select2.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('adminlte/plugins/iCheck/all.css') }}">
+  <link rel="stylesheet" href="{{ asset('adminlte/bower_components/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('adminlte/plugins/timepicker/bootstrap-timepicker.min.css') }}">
 
+  @stack('styles')
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -41,9 +45,7 @@
     </section>
 
     <!-- Main Content -->
-    <section class="content">
-      @yield('content')
-    </section>
+    @yield('content')
   </div>
   <!-- /.content-wrapper -->
 
@@ -55,11 +57,12 @@
 </div>
 <!-- ./wrapper -->
 
-<!-- Scripts -->
+<!-- Core scripts -->
 <script src="{{ asset('adminlte/bower_components/jquery/dist/jquery.min.js') }}"></script>
 <script src="{{ asset('adminlte/bower_components/jquery-ui/jquery-ui.min.js') }}"></script>
 <script>$.widget.bridge('uibutton', $.ui.button);</script>
 <script src="{{ asset('adminlte/bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('adminlte/bower_components/select2/dist/js/select2.full.min.js') }}"></script>
 <script src="{{ asset('adminlte/bower_components/raphael/raphael.min.js') }}"></script>
 <script src="{{ asset('adminlte/bower_components/morris.js/morris.min.js') }}"></script>
 <script src="{{ asset('adminlte/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js') }}"></script>
@@ -67,13 +70,18 @@
 <script src="{{ asset('adminlte/bower_components/moment/min/moment.min.js') }}"></script>
 <script src="{{ asset('adminlte/bower_components/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
 <script src="{{ asset('adminlte/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
-<script src="{{ asset('adminlte/bower_components/jquery-slimscroll/jquery.slimscroll.min.js') }}"></script>
-<script src="{{ asset('adminlte/bower_components/fastclick/lib/fastclick.js') }}"></script>
-<script src="{{ asset('adminlte/dist/js/adminlte.min.js') }}"></script>
-<script src="{{ asset('adminlte/dist/js/demo.js') }}"></script>
 <script src="{{ asset('adminlte/bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
-<script src="{{ asset('https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js') }}"></script>
+<script src="{{ asset('adminlte/bower_components/jquery-slimscroll/jquery.slimscroll.min.js') }}"></script>
+<script src="{{ asset('adminlte/bower_components/fastclick/lib/fastclick.js') }}"></script>
+<script src="{{ asset('adminlte/plugins/input-mask/jquery.inputmask.js') }}"></script>
+<script src="{{ asset('adminlte/plugins/input-mask/jquery.inputmask.date.extensions.js') }}"></script>
+<script src="{{ asset('adminlte/plugins/input-mask/jquery.inputmask.extensions.js') }}"></script>
+<script src="{{ asset('adminlte/bower_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js') }}"></script>
+<script src="{{ asset('adminlte/plugins/timepicker/bootstrap-timepicker.min.js') }}"></script>
+<script src="{{ asset('adminlte/plugins/iCheck/icheck.min.js') }}"></script>
+<script src="{{ asset('adminlte/dist/js/adminlte.min.js') }}"></script>
+<script src="{{ asset('adminlte/dist/js/demo.js') }}"></script>
 
 @stack('scripts')
 </body>

@@ -16,6 +16,9 @@
                 <div class="box-header">
                     <h3 class="box-title">Employee Data Table</h3>
                     <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-success btn-sm" id="btnBulkIdCard" style="display: none;">
+                            <i class="fa fa-file-pdf-o"></i> Download ID Card (<span id="bulkCount">0</span>)
+                        </button>
                         <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalCreateEmployee">
                             <i class="fa fa-plus"></i> Add Employee
                         </button>
@@ -25,6 +28,9 @@
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
                             <tr>
+                                <th>
+                                    <input type="checkbox" id="checkAll" class="flat-red" title="Select All">
+                                </th>
                                 <th>No</th>
                                 <th>Photo</th>
                                 <th>NIP</th>
@@ -41,6 +47,7 @@
                         <tbody></tbody>
                         <tfoot>
                             <tr>
+                                <th></th>
                                 <th>No</th>
                                 <th>Photo</th>
                                 <th>NIP</th>
@@ -301,7 +308,7 @@
 <script>
 $(function () {
 
-    // ── HELPER: buat satu Select2 ─────────────────────────────────────────────
+    // HELPER: buat satu Select2
     function makeSelect2($el, url, placeholder, extraParams) {
         if ($el.hasClass('select2-hidden-accessible')) $el.select2('destroy');
 
@@ -334,7 +341,7 @@ $(function () {
         });
     }
 
-    // ── HELPER: set nilai awal Select2 ───────────────────────────────────────
+    // HELPER: set nilai awal Select2
     function setSelect2Val($el, id, text) {
         if (!id) return;
         if ($el.find('option[value="' + id + '"]').length === 0) {
@@ -343,13 +350,13 @@ $(function () {
         $el.val(id).trigger('change');
     }
 
-    // ── HELPER: reset & disable Select2 ──────────────────────────────────────
+    // HELPER: reset & disable Select2
     function resetSelect2($el) {
         if ($el.hasClass('select2-hidden-accessible')) $el.select2('destroy');
         $el.empty().prop('disabled', true);
     }
 
-    // ── SETUP CASCADING untuk satu form ──────────────────────────────────────
+    // SETUP CASCADING untuk satu form
     function setupCascading(formSel) {
         var $form     = $(formSel);
         var $province = $form.find('.select2-province');
@@ -361,7 +368,7 @@ $(function () {
         makeSelect2($province, '/api/province', '-- Select Province --');
         makeSelect2($job,      '/api/job',      '-- Select Job --');
 
-        // ── Province → City ──────────────────────────────────────────────────
+        // Province → City
         $province.off('change.cascade').on('change.cascade', function () {
             resetSelect2($city);
             resetSelect2($district);
@@ -375,7 +382,7 @@ $(function () {
             }
         });
 
-        // ── City → District ──────────────────────────────────────────────────
+        // City → District
         $city.off('change.cascade').on('change.cascade', function () {
             resetSelect2($district);
             resetSelect2($village);
@@ -388,7 +395,7 @@ $(function () {
             }
         });
 
-        // ── District → Village ───────────────────────────────────────────────
+        // District → Village
         $district.off('change.cascade').on('change.cascade', function () {
             resetSelect2($village);
 
@@ -402,7 +409,7 @@ $(function () {
     }
 
 
-    // ── DATATABLES ────────────────────────────────────────────────────────────
+    // DATATABLES
     var table = $('#example1').DataTable({
         processing: true,
         serverSide: true,
@@ -418,6 +425,16 @@ $(function () {
             }
         },
         columns: [
+            {
+                // Checkbox — tambahkan class flat-red agar di-pick iCheck saat draw
+                data: null,
+                orderable: false,
+                searchable: false,
+                className: 'text-center',
+                render: function (data, type, row) {
+                    return `<input type="checkbox" class="row-checkbox flat-red" value="${row.id}">`;
+                }
+            },
             { data: 'DT_RowIndex',       name: 'DT_RowIndex',       orderable: false, searchable: false },
             {
                 data: 'photo_url',
@@ -444,6 +461,11 @@ $(function () {
                 searchable: false,
                 render: function (data, type, row) {
                     return `
+                        <a href="/api/employee/${row.id}/id-card" target="_blank"
+                            class="btn btn-info btn-xs"
+                            title="Download ID Card PDF">
+                            <i class="fa fa-id-card-o"></i> ID Card
+                        </a>
                         <button class="btn btn-warning btn-xs btn-edit"
                             data-id="${row.id}"
                             data-name="${row.name ?? ''}"
@@ -476,7 +498,98 @@ $(function () {
     });
 
 
-    // ── CREATE ────────────────────────────────────────────────────────────────
+    // HELPER: init iCheck pada elemen yang belum di-init
+    function initICheck($elements) {
+        $elements.iCheck({
+            checkboxClass: 'icheckbox_flat-green',
+            radioClass   : 'iradio_flat-green'
+        });
+    }
+
+    // Init iCheck untuk #checkAll di header
+    initICheck($('input[type="checkbox"].flat-red, input[type="radio"].flat-red'));
+
+    // Re-init iCheck setiap kali DataTable selesai render baris baru
+    table.on('draw', function () {
+        initICheck($('#example1 tbody input[type="checkbox"].flat-red'));
+
+        $('#checkAll').prop('checked', false).prop('indeterminate', false);
+        updateBulkButton();
+    });
+
+    // CHECK ALL — gunakan event iCheck (ifChanged)
+    $('#checkAll').on('ifChanged', function () {
+        var isChecked = $(this).is(':checked');
+        $('#example1 tbody .row-checkbox').each(function () {
+            $(this).iCheck(isChecked ? 'check' : 'uncheck');
+        });
+        updateBulkButton();
+    });
+
+    // ROW CHECKBOX — gunakan event iCheck (ifChanged)
+    $('#example1').on('ifChanged', '.row-checkbox', function () {
+        var total   = $('#example1 tbody .row-checkbox').length;
+        var checked = $('#example1 tbody .row-checkbox:checked').length;
+        $('#checkAll').prop('indeterminate', checked > 0 && checked < total);
+        if (checked === total && total > 0) {
+            $('#checkAll').iCheck('check');
+        } else {
+            $('#checkAll').iCheck('uncheck');
+        }
+        updateBulkButton();
+    });
+
+    function updateBulkButton() {
+        var count = $('#example1 tbody .row-checkbox:checked').length;
+        if (count > 0) {
+            $('#bulkCount').text(count);
+            $('#btnBulkIdCard').show();
+        } else {
+            $('#btnBulkIdCard').hide();
+        }
+    }
+
+
+    // BULK DOWNLOAD PDF
+    $('#btnBulkIdCard').on('click', function () {
+        var ids = $('#example1 tbody .row-checkbox:checked').map(function () {
+            return $(this).val();
+        }).get();
+
+        if (!ids.length) return;
+
+        var $btn = $(this);
+        $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Generating...');
+
+        $.ajax({
+            url: '/api/employee/id-card/bulk',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ ids: ids }),
+            xhrFields: { responseType: 'blob' },
+            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+            success: function (blob) {
+                var url    = window.URL.createObjectURL(blob);
+                var a      = document.createElement('a');
+                a.href     = url;
+                a.download = 'id-card-bulk-' + Date.now() + '.pdf';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            },
+            error: function () {
+                alert('Gagal generate ID Card. Silakan coba lagi.');
+            },
+            complete: function () {
+                $btn.prop('disabled', false);
+                updateBulkButton();
+            }
+        });
+    });
+
+
+    // CREATE
     $('#modalCreateEmployee').on('show.bs.modal', function () {
         setupCascading('#formCreateEmployee');
     });
@@ -506,7 +619,7 @@ $(function () {
     });
 
 
-    // ── EDIT ──────────────────────────────────────────────────────────────────
+    // EDIT
     $('#example1').on('click', '.btn-edit', function () {
         var $btn = $(this);
 
@@ -602,7 +715,7 @@ $(function () {
     });
 
 
-    // ── DELETE ────────────────────────────────────────────────────────────────
+    // DELETE
     $('#example1').on('click', '.btn-delete', function () {
         $('#deleteEmployeeId').val($(this).data('id'));
         $('#deleteEmployeeName').text($(this).data('name'));
@@ -631,7 +744,7 @@ $(function () {
     });
 
 
-    // ── RESET MODAL ───────────────────────────────────────────────────────────
+    // RESET MODAL
     $('#modalCreateEmployee, #modalEditEmployee').on('hidden.bs.modal', function () {
         var $form = $(this).find('form');
         $form[0].reset();
@@ -650,7 +763,7 @@ $(function () {
     });
 
 
-    // ── VALIDATION HELPER ─────────────────────────────────────────────────────
+    // VALIDATION HELPER
     function handleValidationErrors(xhr, formSelector) {
         $(formSelector + ' .form-group').removeClass('has-error');
         $(formSelector + ' .help-block.error-msg').remove();
