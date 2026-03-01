@@ -33,7 +33,6 @@ class EmployeeController extends Controller
                 ->addColumn('city_name', fn($employee): string => $employee->city->name ?? '-')
                 ->addColumn('district_name', fn($employee): string => $employee->district->name ?? '-')
                 ->addColumn('village_name', fn($employee): string => $employee->village->name ?? '-')
-                ->addColumn('postal_code_name', fn($employee): string => $employee->postalCode->name ?? '-')
                 ->addColumn('photo_url', fn($employee): string => $employee->photo
                     ? Storage::url($employee->photo)
                     : asset('images/default-avatar.png')

@@ -20,7 +20,7 @@ class Employee extends Model
         'city_id',
         'district_id',
         'village_id',
-        'postal_code_id',
+        'post_code',
         'photo',
     ];
 
@@ -72,15 +72,5 @@ class Employee extends Model
     public function village()
     {
         return $this->belongsTo(Village::class);
-    }
-
-    /**
-     * Get the postal code that belongs to the employee.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function postalCode()
-    {
-        return $this->belongsTo(PostalCode::class);
     }
 }

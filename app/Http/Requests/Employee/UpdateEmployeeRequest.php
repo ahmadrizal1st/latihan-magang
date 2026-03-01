@@ -43,7 +43,7 @@ class UpdateEmployeeRequest extends FormRequest
             'city_id'       => 'required|exists:cities,id',
             'district_id'   => 'required|exists:districts,id',
             'village_id'    => 'required|exists:villages,id',
-            'postal_code_id'=> 'required|exists:postal_codes,id',
+            'post_code'     => 'required|string|max:10',
             'photo'         => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ];
     }
@@ -84,8 +84,8 @@ class UpdateEmployeeRequest extends FormRequest
             'village_id.required'     => 'Kelurahan wajib dipilih.',
             'village_id.exists'       => 'Kelurahan tidak ditemukan.',
 
-            'postal_code_id.required' => 'Kode pos wajib dipilih.',
-            'postal_code_id.exists'   => 'Kode pos tidak ditemukan.',
+            'post_code.required'      => 'Kode pos wajib diisi.',
+            'post_code.max'           => 'Kode pos maksimal 10 karakter.',
 
             'photo.image'             => 'File harus berupa gambar.',
             'photo.mimes'             => 'Format foto harus jpg, jpeg, atau png.',

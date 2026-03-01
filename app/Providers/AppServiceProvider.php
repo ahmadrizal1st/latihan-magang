@@ -14,8 +14,6 @@ use App\Interfaces\DistrictRepositoryInterface;
 use App\Repositories\DistrictRepository;
 use App\Interfaces\VillageRepositoryInterface;
 use App\Repositories\VillageRepository;
-use App\Interfaces\PostalCodeRepositoryInterface;
-use App\Repositories\PostalCodeRepository;
 use App\Interfaces\CounterRepositoryInterface;
 use App\Repositories\CounterRepository;
 use Illuminate\Support\ServiceProvider;
@@ -55,11 +53,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             VillageRepositoryInterface::class,
             VillageRepository::class,
-        );
-
-        $this->app->bind(
-            PostalCodeRepositoryInterface::class,
-            PostalCodeRepository::class,
         );
 
         $this->app->bind(
