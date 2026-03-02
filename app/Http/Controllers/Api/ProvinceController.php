@@ -25,9 +25,6 @@ class ProvinceController extends Controller
 
             return DataTables::of($provinces)
                 ->addIndexColumn()
-                ->addColumn('cities_count',    fn($p) => $p->cities_count)
-                ->addColumn('districts_count', fn($p) => $p->districts_count)
-                ->addColumn('villages_count',  fn($p) => $p->villages_count)
                 ->addColumn('employees_count', fn($p) => $p->employees_count)
                 ->toJson();
         }

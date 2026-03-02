@@ -25,8 +25,9 @@ class VillageController extends Controller
 
             return DataTables::of($villages)
                 ->addIndexColumn()
+                ->addColumn('province_name',   fn($d) => $d->district->city->province?->name ?? '-')
+                ->addColumn('city_name',       fn($d) => $d->district->city?->name ?? '-')
                 ->addColumn('district_name',   fn($v) => $v->district?->name ?? '-')
-                ->addColumn('district_id',     fn($v) => $v->district_id)
                 ->addColumn('employees_count', fn($v) => $v->employees_count)
                 ->toJson();
         }

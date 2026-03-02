@@ -28,6 +28,8 @@
                             <tr>
                                 <th>No</th>
                                 <th>Name</th>
+                                <th>Province</th>
+                                <th>City</th>
                                 <th>District</th>
                                 <th>Employees</th>
                                 <th>Action</th>
@@ -38,6 +40,8 @@
                             <tr>
                                 <th>No</th>
                                 <th>Name</th>
+                                <th>Province</th>
+                                <th>City</th>
                                 <th>District</th>
                                 <th>Employees</th>
                                 <th>Action</th>
@@ -163,7 +167,7 @@
 <script>
 $(function () {
 
-    // ── INIT SELECT2 DISTRICT ─────────────────────────────────────────────────
+    // INIT SELECT2 DISTRICT
     function initSelect2District(selector, modalSelector) {
         $(selector).select2({
             placeholder: '-- Select District --',
@@ -196,7 +200,7 @@ $(function () {
     initSelect2District('#editVillageDistrictId', '#modalEditVillage');
 
 
-    // ── DATATABLE ─────────────────────────────────────────────────────────────
+    // DATATABLE
     var table = $('#example1').DataTable({
         processing: true,
         serverSide: true,
@@ -214,6 +218,8 @@ $(function () {
         columns: [
             { data: 'DT_RowIndex',     name: 'DT_RowIndex', orderable: false, searchable: false },
             { data: 'name',            name: 'name' },
+            { data: 'province_name',   name: 'province_name', orderable: false, searchable: false },
+            { data: 'city_name',       name: 'city_name', orderable: false, searchable: false },
             { data: 'district_name',   name: 'district_name', orderable: false, searchable: false, defaultContent: '-' },
             { data: 'employees_count', name: 'employees_count', searchable: false, orderable: false, defaultContent: 0 },
             {
@@ -221,27 +227,27 @@ $(function () {
                 orderable: false,
                 searchable: false,
                 render: function(data, type, row) {
-                    return `
-                        <button class="btn btn-warning btn-xs btn-edit"
-                            data-id="${data}"
-                            data-name="${row.name}"
-                            data-district-id="${row.district_id ?? ''}"
-                            data-district-name="${row.district_name ?? ''}">
-                            <i class="fa fa-pencil"></i> Edit
-                        </button>
-                        <button class="btn btn-danger btn-xs btn-delete"
-                            data-id="${data}"
-                            data-name="${row.name}">
-                            <i class="fa fa-trash"></i> Delete
-                        </button>
-                    `;
+                    var e = row;
+                    return '<button class="btn btn-warning btn-xs btn-edit"'
+                             + ' data-id="'             + e.id                     + '"'
+                             + ' data-name="'           + (e.name              ?? '') + '"'
+                             + ' data-province-id="'    + (e.province_id       ?? '') + '"'
+                             + ' data-province-name="'  + (e.province_name     ?? '') + '"'
+                             + ' data-city-id="'        + (e.city_id           ?? '') + '"'
+                             + ' data-city-name="'      + (e.city_name         ?? '') + '"'
+                             + ' data-district-id="'    + (e.district_id       ?? '') + '"'
+                             + ' data-district-name="'  + (e.district_name     ?? '') + '">'
+                             + '<i class="fa fa-pencil"></i> Edit</button> '
+                         + '<button class="btn btn-danger btn-xs btn-delete"'
+                             + ' data-id="' + e.id + '" data-name="' + e.name + '">'
+                             + '<i class="fa fa-trash"></i> Delete</button>';
                 }
             }
         ],
     });
 
 
-    // ── CREATE ────────────────────────────────────────────────────────────────
+    // CREATE
     $('#formCreateVillage').on('submit', function(e) {
         e.preventDefault();
         var $btn = $(this).find('[type="submit"]');
@@ -265,7 +271,7 @@ $(function () {
     });
 
 
-    // ── OPEN EDIT MODAL ───────────────────────────────────────────────────────
+    // OPEN EDIT MODAL
     $('#example1').on('click', '.btn-edit', function() {
         var districtId   = $(this).data('district-id');
         var districtName = $(this).data('district-name');
@@ -283,7 +289,7 @@ $(function () {
     });
 
 
-    // ── EDIT SUBMIT ───────────────────────────────────────────────────────────
+    // EDIT SUBMIT
     $('#formEditVillage').on('submit', function(e) {
         e.preventDefault();
         var id   = $('#editVillageId').val();
@@ -308,7 +314,7 @@ $(function () {
     });
 
 
-    // ── OPEN DELETE MODAL ─────────────────────────────────────────────────────
+    // OPEN DELETE MODAL
     $('#example1').on('click', '.btn-delete', function() {
         $('#deleteVillageId').val($(this).data('id'));
         $('#deleteVillageName').text($(this).data('name'));
@@ -316,7 +322,7 @@ $(function () {
     });
 
 
-    // ── CONFIRM DELETE ────────────────────────────────────────────────────────
+    // CONFIRM DELETE
     $('#btnConfirmDeleteVillage').on('click', function() {
         var id   = $('#deleteVillageId').val();
         var $btn = $(this);
@@ -339,7 +345,7 @@ $(function () {
     });
 
 
-    // ── RESET MODALS ON CLOSE ─────────────────────────────────────────────────
+    // RESET MODALS ON CLOSE
     $('#modalCreateVillage, #modalEditVillage').on('hidden.bs.modal', function() {
         $(this).find('form')[0].reset();
         $(this).find('.form-group').removeClass('has-error');
@@ -348,7 +354,7 @@ $(function () {
     });
 
 
-    // ── VALIDATION HELPER ─────────────────────────────────────────────────────
+    // VALIDATION HELPER
     function handleValidationErrors(xhr, formSelector) {
         $(formSelector + ' .form-group').removeClass('has-error');
         $(formSelector + ' .help-block.error-msg').remove();

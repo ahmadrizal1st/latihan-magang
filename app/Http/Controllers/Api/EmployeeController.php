@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Employee\StoreEmployeeRequest;
 use App\Http\Requests\Employee\UpdateEmployeeRequest;
 use App\Interfaces\EmployeeRepositoryInterface;
+use App\Services\IdCardService;
 use App\Services\NipService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -16,6 +17,7 @@ class EmployeeController extends Controller
     public function __construct(
         private EmployeeRepositoryInterface $employeeRepository,
         private NipService $nipService,
+        private IdCardService $idCardService,
     ) {}
 
     /**
@@ -37,6 +39,8 @@ class EmployeeController extends Controller
                     ? Storage::url($employee->photo)
                     : asset('images/default-avatar.png')
                 )
+                // ->orderColumn('created_at', 'created_at $1')
+                ->orderColumn('updated_at', 'updated_at $1')
                 ->toJson();
         }
 
@@ -127,4 +131,36 @@ class EmployeeController extends Controller
             'message' => 'Karyawan berhasil dihapus.',
         ]);
     }
+
+    /**
+     * Download PDF ID Card untuk satu karyawan.
+     */
+    public function downloadIdCard($id)
+    {
+        $employee = $this->employeeRepository->findById($id);
+
+        return $this->idCardService->generateSingle($employee);
+    }
+
+    /**
+     * Download PDF ID Card untuk banyak karyawan (bulk).
+     *
+     * Request body (JSON):
+     * {
+     *   "ids": [1, 2, 3]
+     * }
+     */
+    public function downloadIdCardBulk(Request $request)
+    {
+        $request->validate([
+            'ids'   => ['required', 'array', 'min:1'],
+            'ids.*' => ['integer', 'exists:employees,id'],
+        ]);
+
+        $employees = collect($request->ids)
+            ->map(fn($id) => $this->employeeRepository->findById($id));
+
+        return $this->idCardService->generateBulk($employees);
+    }
+
 }

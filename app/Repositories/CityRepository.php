@@ -16,8 +16,8 @@ class CityRepository implements CityRepositoryInterface
      */
     public function getAll()
     {
-        return City::with('province')
-            ->withCount(['districts', 'villages', 'employees']);
+        return $this->model->with('province')
+            ->withCount('employees');
     }
 
     /**
@@ -25,7 +25,7 @@ class CityRepository implements CityRepositoryInterface
      */
     public function search(string $keyword, ?int $provinceId = null) 
     {
-        return City::when($provinceId, fn($q) => $q->where('province_id', $provinceId))
+        return $this->model->when($provinceId, fn($q) => $q->where('province_id', $provinceId))
             ->when($keyword, fn($q) => $q->whereLike('name', "%{$keyword}%"))
             ->select('id', 'name')
             ->orderBy('name')

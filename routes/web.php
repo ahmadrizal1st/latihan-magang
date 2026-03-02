@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Web\PostalCodeController;
 use App\Http\Controllers\Web\CityController;
 use App\Http\Controllers\Web\CounterController;
 use App\Http\Controllers\Web\DistrictController;
@@ -30,6 +29,3 @@ Route::get('/district', [DistrictController::class,'index']);
 
 // Village
 Route::get('/village', [VillageController::class,'index']);
-
-// Village
-Route::get('/postal-code', [PostalCodeController::class,'index']);
