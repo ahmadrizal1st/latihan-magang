@@ -26,9 +26,9 @@ class EmployeeRepository implements EmployeeRepositoryInterface
     }
 
     /**
-     * Find by id employees with their related data.
+     * Get by id employees with their related data.
      */
-    public function findById($id)
+    public function getById($id)
     {
         return $this->model->findOrFail($id);
     }

@@ -12,7 +12,7 @@ interface EmployeeRepositoryInterface
     /**
      * Find by id employees with their related data.
      */
-    public function findById($id);
+    public function getById($id);
 
     /**
      * Search employees by name or NIP.

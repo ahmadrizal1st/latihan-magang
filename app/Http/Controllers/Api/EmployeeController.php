@@ -39,8 +39,6 @@ class EmployeeController extends Controller
                     ? Storage::url($employee->photo)
                     : asset('images/default-avatar.png')
                 )
-                // ->orderColumn('created_at', 'created_at $1')
-                ->orderColumn('updated_at', 'updated_at $1')
                 ->toJson();
         }
 
@@ -91,7 +89,7 @@ class EmployeeController extends Controller
     {
         $data = $request->validated();
 
-        $employee = $this->employeeRepository->findById($id);
+        $employee = $this->employeeRepository->getById($id);
 
         if (empty($employee->nip) && !empty($data['date_of_birth'])) {
             $data['nip'] = $this->nipService->generate($data['date_of_birth']);
@@ -118,7 +116,7 @@ class EmployeeController extends Controller
      */
     public function destroy($id)
     {
-        $employee = $this->employeeRepository->findById($id);
+        $employee = $this->employeeRepository->getById($id);
 
         if ($employee->photo) {
             Storage::disk('public')->delete($employee->photo);
@@ -137,7 +135,7 @@ class EmployeeController extends Controller
      */
     public function downloadIdCard($id)
     {
-        $employee = $this->employeeRepository->findById($id);
+        $employee = $this->employeeRepository->getById($id);
 
         return $this->idCardService->generateSingle($employee);
     }
@@ -158,7 +156,7 @@ class EmployeeController extends Controller
         ]);
 
         $employees = collect($request->ids)
-            ->map(fn($id) => $this->employeeRepository->findById($id));
+            ->map(fn($id) => $this->employeeRepository->getById($id));
 
         return $this->idCardService->generateBulk($employees);
     }
