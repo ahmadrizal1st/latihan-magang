@@ -58,6 +58,11 @@
               <i class="fa fa-home"></i> Village
             </a>
           </li>
+          <li>
+            <a href="{{ url("setting") }}">
+              <i class="fa fa-gear"></i> Setting
+            </a>
+          </li>
         </li>
       </ul>
     </section>

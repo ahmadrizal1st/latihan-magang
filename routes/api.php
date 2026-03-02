@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\DistrictController;
 use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Api\EmployeeJobController;
 use App\Http\Controllers\Api\ProvinceController;
+use App\Http\Controllers\API\SettingController;
 use App\Http\Controllers\Api\VillageController;
 use Illuminate\Support\Facades\Route;
 
@@ -66,3 +67,7 @@ Route::prefix('village')->group(function () {
     Route::put('/{id}', [VillageController::class,'update']);
     Route::delete('/{id}', [VillageController::class,'destroy']);
 });
+
+// Setting
+Route::get('setting', [SettingController::class, 'show']);
+Route::put('setting', [SettingController::class, 'update']);

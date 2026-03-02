@@ -3,22 +3,26 @@
 namespace App\Services;
 
 use App\Models\Employee;
+use App\Models\Setting;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Picqer\Barcode\BarcodeGeneratorSVG;
 
 class IdCardService
 {
     /**
      * Generate PDF ID Card untuk satu karyawan.
      */
-    public function generateSingle(Employee $employee): \Illuminate\Http\Response
+    public function generateSingle(Employee $employee)
     {
         $data = $this->prepareEmployeeData($employee);
+        $settings = Setting::first();
 
-        $pdf = Pdf::loadView('pdf.id-card', ['employees' => collect([$data])])
+        $pdf = Pdf::loadView('pdf.id-card', [
+            'employees' => collect([$data]),
+            'settings'  => $settings,
+            ])
             ->setPaper([0, 0, 242.65, 153.07], 'landscape');
 
         return $pdf->download("id-card-{$employee->nip}.pdf");
@@ -27,22 +31,26 @@ class IdCardService
     /**
      * Generate PDF ID Card bulk — semua karyawan dalam satu file.
      */
-    public function generateBulk(Collection $employees): \Illuminate\Http\Response
+    public function generateBulk(Collection $employees)
     {
         $data = $employees->map(fn($e) => $this->prepareEmployeeData($e));
+        $settings = Setting::first();
 
-        $pdf = Pdf::loadView('pdf.id-card', ['employees' => $data])
+        $pdf = Pdf::loadView('pdf.id-card', [
+            'employees' => $data,
+            'settings'  => $settings,
+            ])
             ->setPaper([0, 0, 242.65, 153.07], 'landscape');
 
         return $pdf->download('id-card-bulk-' . now()->format('YmdHis') . '.pdf');
     }
 
     /**
-     * Siapkan data karyawan termasuk photo base64 & barcode SVG.
+     * Siapkan data karyawan termasuk photo base64.
      */
-    private function prepareEmployeeData(Employee $employee): array
+    private function prepareEmployeeData(Employee $employee)
     {
-        // ── Photo → base64 ──────────────────────────────────
+        // Photo → base64
         $photoBase64 = null;
         if ($employee->photo && Storage::disk('public')->exists($employee->photo)) {
             $content     = Storage::disk('public')->get($employee->photo);
@@ -51,9 +59,7 @@ class IdCardService
             $photoBase64 = 'data:' . $mime . ';base64,' . base64_encode($content);
         }
 
-        // ── NIP → barcode SVG inline ─────────────────────────
         $nip        = $employee->nip ?? '000000000000000';
-        $barcodeSvg = $this->generateBarcode($nip);
 
         return [
             'nip'            => $nip,
@@ -69,23 +75,6 @@ class IdCardService
             'post_code'      => $employee->post_code       ?? '-',
             'job'            => $employee->employeeJob->name ?? '-',
             'photo_base64'   => $photoBase64,
-            'barcode_svg'    => $barcodeSvg,
         ];
-    }
-
-    /**
-     * Generate barcode CODE128 sebagai SVG string.
-     */
-    private function generateBarcode(string $nip): string
-    {
-        $generator = new BarcodeGeneratorSVG();
-
-        return $generator->getBarcode(
-            $nip,
-            BarcodeGeneratorSVG::TYPE_CODE_128,
-            widthFactor: 1,
-            height: 18,
-            foregroundColor: '#ffffff',
-        );
     }
 }

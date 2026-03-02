@@ -6,6 +6,7 @@ use App\Http\Controllers\Web\DistrictController;
 use App\Http\Controllers\Web\EmployeeController;
 use App\Http\Controllers\Web\EmployeeJobController;
 use App\Http\Controllers\Web\ProvinceController;
+use App\Http\Controllers\Web\SettingController;
 use App\Http\Controllers\Web\VillageController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,3 +30,6 @@ Route::get('/district', [DistrictController::class,'index']);
 
 // Village
 Route::get('/village', [VillageController::class,'index']);
+
+// Setting
+Route::get('/setting', [SettingController::class,'index']);

@@ -176,7 +176,7 @@
 
         <!-- Header -->
         <div class="card-header">
-            <div class="company-name">PT. Perusahaan Indonesia</div>
+            <div class="company-name">{{ $settings->company_name ?? 'PT. PERUSAHAAN INDONESIA' }}</div>
             <div class="card-title">KARTU TANDA KARYAWAN</div>
         </div>
         <div class="accent-bar"></div>

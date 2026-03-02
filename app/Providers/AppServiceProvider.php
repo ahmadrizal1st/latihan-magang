@@ -2,20 +2,22 @@
 
 namespace App\Providers;
 
-use App\Interfaces\EmployeeRepositoryInterface;
-use App\Repositories\EmployeeRepository;
 use App\Interfaces\CityRepositoryInterface;
-use App\Repositories\CityRepository;
-use App\Interfaces\EmployeeJobRepositoryInterface;
-use App\Repositories\EmployeeJobRepository;
-use App\Interfaces\ProvinceRepositoryInterface;
-use App\Repositories\ProvinceRepository;
-use App\Interfaces\DistrictRepositoryInterface;
-use App\Repositories\DistrictRepository;
-use App\Interfaces\VillageRepositoryInterface;
-use App\Repositories\VillageRepository;
 use App\Interfaces\CounterRepositoryInterface;
+use App\Interfaces\DistrictRepositoryInterface;
+use App\Interfaces\EmployeeJobRepositoryInterface;
+use App\Interfaces\EmployeeRepositoryInterface;
+use App\Interfaces\ProvinceRepositoryInterface;
+use App\Interfaces\SettingRepositoryInterface;
+use App\Interfaces\VillageRepositoryInterface;
+use App\Repositories\CityRepository;
 use App\Repositories\CounterRepository;
+use App\Repositories\DistrictRepository;
+use App\Repositories\EmployeeJobRepository;
+use App\Repositories\EmployeeRepository;
+use App\Repositories\ProvinceRepository;
+use App\Repositories\SettingRepository;
+use App\Repositories\VillageRepository;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -58,6 +60,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             CounterRepositoryInterface::class,
             CounterRepository::class,
+        );
+
+        $this->app->bind(
+            SettingRepositoryInterface::class,
+            SettingRepository::class,
         );
     }
 
