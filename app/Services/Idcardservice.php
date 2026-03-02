@@ -7,7 +7,6 @@ use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Picqer\Barcode\BarcodeGeneratorSVG;
 
 class IdCardService
 {
@@ -38,11 +37,11 @@ class IdCardService
     }
 
     /**
-     * Siapkan data karyawan termasuk photo base64 & barcode SVG.
+     * Siapkan data karyawan termasuk photo base64.
      */
     private function prepareEmployeeData(Employee $employee): array
     {
-        // ── Photo → base64 ──────────────────────────────────
+        // Photo → base64
         $photoBase64 = null;
         if ($employee->photo && Storage::disk('public')->exists($employee->photo)) {
             $content     = Storage::disk('public')->get($employee->photo);
@@ -51,9 +50,7 @@ class IdCardService
             $photoBase64 = 'data:' . $mime . ';base64,' . base64_encode($content);
         }
 
-        // ── NIP → barcode SVG inline ─────────────────────────
         $nip        = $employee->nip ?? '000000000000000';
-        $barcodeSvg = $this->generateBarcode($nip);
 
         return [
             'nip'            => $nip,
@@ -69,23 +66,6 @@ class IdCardService
             'post_code'      => $employee->post_code       ?? '-',
             'job'            => $employee->employeeJob->name ?? '-',
             'photo_base64'   => $photoBase64,
-            'barcode_svg'    => $barcodeSvg,
         ];
-    }
-
-    /**
-     * Generate barcode CODE128 sebagai SVG string.
-     */
-    private function generateBarcode(string $nip): string
-    {
-        $generator = new BarcodeGeneratorSVG();
-
-        return $generator->getBarcode(
-            $nip,
-            BarcodeGeneratorSVG::TYPE_CODE_128,
-            widthFactor: 1,
-            height: 18,
-            foregroundColor: '#ffffff',
-        );
     }
 }
