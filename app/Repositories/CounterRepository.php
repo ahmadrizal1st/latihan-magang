@@ -21,7 +21,7 @@ class CounterRepository implements CounterRepositoryInterface
 
     public function search(string $keyword) 
     {
-        return Counter::whereLike('name', "%{$keyword}%")
+        return $this->model->whereLike('name', "%{$keyword}%")
             ->select('id', 'code')
             ->orderBy('code')
             ->limit(50)

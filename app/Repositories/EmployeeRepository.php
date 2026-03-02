@@ -38,7 +38,7 @@ class EmployeeRepository implements EmployeeRepositoryInterface
      */
     public function search(string $keyword)
     {
-        return Employee::whereLike('name', "%{$keyword}%")
+        return $this->model->whereLike('name', "%{$keyword}%")
             ->orWhereLike('nip', "%{$keyword}%")
             ->select('id', 'name', 'nip', 'job_id')
             ->with('employeeJob')

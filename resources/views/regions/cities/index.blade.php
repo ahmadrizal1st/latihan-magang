@@ -29,8 +29,6 @@
                                 <th>No</th>
                                 <th>Name</th>
                                 <th>Province</th>
-                                <th>Districts</th>
-                                <th>Villages</th>
                                 <th>Employees</th>
                                 <th>Action</th>
                             </tr>
@@ -41,8 +39,6 @@
                                 <th>No</th>
                                 <th>Name</th>
                                 <th>Province</th>
-                                <th>Districts</th>
-                                <th>Villages</th>
                                 <th>Employees</th>
                                 <th>Action</th>
                             </tr>
@@ -167,7 +163,7 @@
 <script>
 $(function () {
 
-    // ── INIT SELECT2 ──────────────────────────────────────────────────────────
+    // INIT SELECT2
     function initSelect2Province(selector, modalSelector) {
         $(selector).select2({
             placeholder: '-- Select Province --',
@@ -201,7 +197,7 @@ $(function () {
     initSelect2Province('#editProvinceId', '#modalEditCity');
 
 
-    // ── DATATABLE ─────────────────────────────────────────────────────────────
+    // DATATABLE
     var table = $('#example1').DataTable({
         processing: true,
         serverSide: true,
@@ -220,8 +216,6 @@ $(function () {
             { data: 'DT_RowIndex',     name: 'DT_RowIndex', orderable: false, searchable: false },
             { data: 'name',            name: 'name' },
             { data: 'province_name',   name: 'province_name' },
-            { data: 'districts_count', name: 'districts_count', searchable: false },
-            { data: 'villages_count',  name: 'villages_count',  searchable: false },
             { data: 'employees_count', name: 'employees_count', searchable: false },
             {
                 data: 'id',
@@ -248,7 +242,7 @@ $(function () {
     });
 
 
-    // ── CREATE ────────────────────────────────────────────────────────────────
+    // CREATE
     $('#formCreateCity').on('submit', function(e) {
         e.preventDefault();
         var $btn = $(this).find('[type="submit"]');
@@ -272,7 +266,7 @@ $(function () {
     });
 
 
-    // ── OPEN EDIT MODAL ───────────────────────────────────────────────────────
+    // OPEN EDIT MODAL
     $('#example1').on('click', '.btn-edit', function() {
         var provinceId   = $(this).data('province-id');
         var provinceName = $(this).data('province-name');
@@ -290,7 +284,7 @@ $(function () {
         $('#modalEditCity').modal('show');
     });
 
-    // ── EDIT SUBMIT ───────────────────────────────────────────────────────────
+    // EDIT SUBMIT────
     $('#formEditCity').on('submit', function(e) {
         e.preventDefault();
         var id   = $('#editCityId').val();
@@ -315,14 +309,14 @@ $(function () {
     });
 
 
-    // ── OPEN DELETE MODAL ─────────────────────────────────────────────────────
+    // OPEN DELETE MODAL
     $('#example1').on('click', '.btn-delete', function() {
         $('#deleteCityId').val($(this).data('id'));
         $('#deleteCityName').text($(this).data('name'));
         $('#modalDeleteCity').modal('show');
     });
 
-    // ── CONFIRM DELETE ────────────────────────────────────────────────────────
+    // CONFIRM DELETE─
     $('#btnConfirmDeleteCity').on('click', function() {
         var id   = $('#deleteCityId').val();
         var $btn = $(this);
@@ -345,7 +339,7 @@ $(function () {
     });
 
 
-    // ── RESET MODALS ON CLOSE ─────────────────────────────────────────────────
+    // RESET MODALS ON CLOSE
     $('#modalCreateCity, #modalEditCity').on('hidden.bs.modal', function() {
         $(this).find('form')[0].reset();
         $(this).find('.form-group').removeClass('has-error');
@@ -355,7 +349,7 @@ $(function () {
     });
 
 
-    // ── VALIDATION HELPER ─────────────────────────────────────────────────────
+    // VALIDATION HELPER
     function handleValidationErrors(xhr, formSelector) {
         $(formSelector + ' .form-group').removeClass('has-error');
         $(formSelector + ' .help-block.error-msg').remove();

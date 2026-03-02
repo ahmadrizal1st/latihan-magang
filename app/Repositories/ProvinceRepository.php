@@ -16,7 +16,7 @@ class ProvinceRepository implements ProvinceRepositoryInterface
      */
     public function getAll()
     {
-        return Province::withCount(['cities', 'districts', 'villages', 'employees']);
+        return $this->model->withCount(['cities', 'districts', 'villages', 'employees']);
     }
 
     /**
@@ -24,7 +24,7 @@ class ProvinceRepository implements ProvinceRepositoryInterface
      */
     public function search(string $keyword)
     {
-        return Province::whereLike('name', "%{$keyword}%")
+        return $this->model->whereLike('name', "%{$keyword}%")
             ->select('id', 'name')
             ->orderBy('name')
             ->limit(50)

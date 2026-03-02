@@ -16,8 +16,8 @@ class DistrictRepository implements DistrictRepositoryInterface
      */
     public function getAll()
     {
-        return District::with('city')
-            ->withCount(['villages', 'employees']);
+        return $this->model->with(['city.province'])
+            ->withCount('employees');
     }
 
     /**
@@ -25,7 +25,7 @@ class DistrictRepository implements DistrictRepositoryInterface
      */
     public function search(string $keyword, ?int $cityId = null) 
     {
-        return District::when($cityId, fn($q) => $q->where('city_id', $cityId))
+        return $this->model->when($cityId, fn($q) => $q->where('city_id', $cityId))
             ->when($keyword, fn($q) => $q->whereLike('name', "%{$keyword}%"))
             ->select('id', 'name')
             ->orderBy('name')

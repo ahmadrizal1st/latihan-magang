@@ -466,7 +466,9 @@ $(function () {
             { data: 'post_code',         name: 'post_code',         orderable: false, searchable: false, defaultContent: '-' },
             { data: 'employee_job_name', name: 'employee_job_name', orderable: false, searchable: false, defaultContent: '-' },
             {
-                data: null, orderable: false, searchable: false,
+                data: null,
+                orderable: false,
+                searchable: false,
                 render: function (data, type, row) {
                     var e = row;
                     return '<a href="/api/employee/' + e.id + '/id-card" target="_blank" class="btn btn-info btn-xs">'

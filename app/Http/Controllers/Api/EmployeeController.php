@@ -39,6 +39,8 @@ class EmployeeController extends Controller
                     ? Storage::url($employee->photo)
                     : asset('images/default-avatar.png')
                 )
+                // ->orderColumn('created_at', 'created_at $1')
+                ->orderColumn('updated_at', 'updated_at $1')
                 ->toJson();
         }
 

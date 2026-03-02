@@ -24,7 +24,7 @@ class EmployeeJobRepository implements EmployeeJobRepositoryInterface
      */
     public function search(string $keyword) 
     {
-        return EmployeeJob::whereLike('name', "%{$keyword}%")
+        return $this->model->whereLike('name', "%{$keyword}%")
             ->select('id', 'name')
             ->orderBy('name')
             ->limit(50)

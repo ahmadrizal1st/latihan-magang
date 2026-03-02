@@ -28,8 +28,6 @@ class CityController extends Controller
                 ->addIndexColumn()
                 ->addColumn('province_name',   fn($c) => $c->province?->name ?? '-')
                 ->addColumn('province_id',     fn($c) => $c->province_id)
-                ->addColumn('districts_count', fn($c) => $c->districts_count)
-                ->addColumn('villages_count',  fn($c) => $c->villages_count)
                 ->addColumn('employees_count', fn($c) => $c->employees_count)
                 ->toJson();
         }

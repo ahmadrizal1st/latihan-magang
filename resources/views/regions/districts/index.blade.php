@@ -28,8 +28,8 @@
                             <tr>
                                 <th>No</th>
                                 <th>Name</th>
+                                <th>Province</th>
                                 <th>City</th>
-                                <th>Villages</th>
                                 <th>Employees</th>
                                 <th>Action</th>
                             </tr>
@@ -39,8 +39,8 @@
                             <tr>
                                 <th>No</th>
                                 <th>Name</th>
+                                <th>Province</th>
                                 <th>City</th>
-                                <th>Villages</th>
                                 <th>Employees</th>
                                 <th>Action</th>
                             </tr>
@@ -165,7 +165,7 @@
 <script>
 $(function () {
 
-    // ── INIT SELECT2 CITY ─────────────────────────────────────────────────────
+    // INIT SELECT2 CITY
     function initSelect2City(selector, modalSelector) {
         $(selector).select2({
             placeholder: '-- Select City --',
@@ -198,7 +198,7 @@ $(function () {
     initSelect2City('#editDistrictCityId', '#modalEditDistrict');
 
 
-    // ── DATATABLE ─────────────────────────────────────────────────────────────
+    // DATATABLE
     var table = $('#example1').DataTable({
         processing: true,
         serverSide: true,
@@ -216,35 +216,33 @@ $(function () {
         columns: [
             { data: 'DT_RowIndex',     name: 'DT_RowIndex', orderable: false, searchable: false },
             { data: 'name',            name: 'name' },
+            { data: 'province_name',   name: 'province_name', orderable: false, searchable: false },
             { data: 'city_name',       name: 'city_name', orderable: false, searchable: false },
-            { data: 'villages_count',  name: 'villages_count',  searchable: false, orderable: false, defaultContent: 0 },
             { data: 'employees_count', name: 'employees_count', searchable: false, orderable: false, defaultContent: 0 },
             {
                 data: 'id',
                 orderable: false,
                 searchable: false,
                 render: function(data, type, row) {
-                    return `
-                        <button class="btn btn-warning btn-xs btn-edit"
-                            data-id="${data}"
-                            data-name="${row.name}"
-                            data-city-id="${row.city_id ?? ''}"
-                            data-city-name="${row.city_name ?? ''}">
-                            <i class="fa fa-pencil"></i> Edit
-                        </button>
-                        <button class="btn btn-danger btn-xs btn-delete"
-                            data-id="${data}"
-                            data-name="${row.name}">
-                            <i class="fa fa-trash"></i> Delete
-                        </button>
-                    `;
+                    var e = row;
+                    return '<button class="btn btn-warning btn-xs btn-edit"'
+                             + ' data-id="'             + e.id                     + '"'
+                             + ' data-name="'           + (e.name              ?? '') + '"'
+                             + ' data-province-id="'    + (e.province_id       ?? '') + '"'
+                             + ' data-province-name="'  + (e.province_name     ?? '') + '"'
+                             + ' data-city-id="'        + (e.city_id           ?? '') + '"'
+                             + ' data-city-name="'      + (e.city_name         ?? '') + '">'
+                             + '<i class="fa fa-pencil"></i> Edit</button> '
+                         + '<button class="btn btn-danger btn-xs btn-delete"'
+                             + ' data-id="' + e.id + '" data-name="' + e.name + '">'
+                             + '<i class="fa fa-trash"></i> Delete</button>';
                 }
             }
         ],
     });
 
 
-    // ── CREATE ────────────────────────────────────────────────────────────────
+    // CREATE
     $('#formCreateDistrict').on('submit', function(e) {
         e.preventDefault();
         var $btn = $(this).find('[type="submit"]');
@@ -268,7 +266,7 @@ $(function () {
     });
 
 
-    // ── OPEN EDIT MODAL ───────────────────────────────────────────────────────
+    // OPEN EDIT MODAL
     $('#example1').on('click', '.btn-edit', function() {
         var cityId   = $(this).data('city-id');
         var cityName = $(this).data('city-name');
@@ -287,7 +285,7 @@ $(function () {
     });
 
 
-    // ── EDIT SUBMIT ───────────────────────────────────────────────────────────
+    // EDIT SUBMIT
     $('#formEditDistrict').on('submit', function(e) {
         e.preventDefault();
         var id   = $('#editDistrictId').val();
@@ -312,7 +310,7 @@ $(function () {
     });
 
 
-    // ── OPEN DELETE MODAL ─────────────────────────────────────────────────────
+    // OPEN DELETE MODAL
     $('#example1').on('click', '.btn-delete', function() {
         $('#deleteDistrictId').val($(this).data('id'));
         $('#deleteDistrictName').text($(this).data('name'));
@@ -320,7 +318,7 @@ $(function () {
     });
 
 
-    // ── CONFIRM DELETE ────────────────────────────────────────────────────────
+    // CONFIRM DELETE
     $('#btnConfirmDeleteDistrict').on('click', function() {
         var id   = $('#deleteDistrictId').val();
         var $btn = $(this);
@@ -343,7 +341,7 @@ $(function () {
     });
 
 
-    // ── RESET MODALS ON CLOSE ─────────────────────────────────────────────────
+    // RESET MODALS ON CLOSE
     $('#modalCreateDistrict, #modalEditDistrict').on('hidden.bs.modal', function() {
         $(this).find('form')[0].reset();
         $(this).find('.form-group').removeClass('has-error');
@@ -352,7 +350,7 @@ $(function () {
     });
 
 
-    // ── VALIDATION HELPER ─────────────────────────────────────────────────────
+    // VALIDATION HELPER
     function handleValidationErrors(xhr, formSelector) {
         $(formSelector + ' .form-group').removeClass('has-error');
         $(formSelector + ' .help-block.error-msg').remove();
