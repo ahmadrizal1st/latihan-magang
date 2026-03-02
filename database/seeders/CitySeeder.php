@@ -7,6 +7,7 @@ use App\Models\Province;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 
 class CitySeeder extends Seeder
 {
@@ -17,6 +18,16 @@ class CitySeeder extends Seeder
      */
     public function run(): void
     {
+        if (!Schema::hasTable('provinces')) {
+            $this->command->warn('Tabel provinces belum ada, CitySeeder dilewati.');
+            return;
+        }
+
+        if (!Schema::hasTable('cities')) {
+            $this->command->warn('Tabel cities belum ada, CitySeeder dilewati.');
+            return;
+        }
+
         $this->command->info('Mengambil data cities...');
 
         $provinces = Province::all();
