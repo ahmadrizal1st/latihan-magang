@@ -9,6 +9,7 @@ use App\Interfaces\EmployeeJobRepositoryInterface;
 use App\Interfaces\EmployeeRepositoryInterface;
 use App\Interfaces\ProvinceRepositoryInterface;
 use App\Interfaces\SettingRepositoryInterface;
+use App\Interfaces\UserRepositoryInterface;
 use App\Interfaces\VillageRepositoryInterface;
 use App\Repositories\CityRepository;
 use App\Repositories\CounterRepository;
@@ -17,6 +18,7 @@ use App\Repositories\EmployeeJobRepository;
 use App\Repositories\EmployeeRepository;
 use App\Repositories\ProvinceRepository;
 use App\Repositories\SettingRepository;
+use App\Repositories\UserRepository;
 use App\Repositories\VillageRepository;
 use Illuminate\Support\ServiceProvider;
 
@@ -27,6 +29,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->bind(
+            UserRepositoryInterface::class,
+            UserRepository::class,
+        );
+
         $this->app->bind(
             EmployeeRepositoryInterface::class,
             EmployeeRepository::class,

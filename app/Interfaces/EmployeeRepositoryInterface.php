@@ -10,7 +10,7 @@ interface EmployeeRepositoryInterface
     public function getAll();
 
     /**
-     * Find by id employees with their related data.
+     * Get by ID employees with their related data.
      */
     public function getById($id);
 

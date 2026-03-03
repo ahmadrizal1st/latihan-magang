@@ -7,8 +7,17 @@ use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Api\EmployeeJobController;
 use App\Http\Controllers\Api\ProvinceController;
 use App\Http\Controllers\API\SettingController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\VillageController;
 use Illuminate\Support\Facades\Route;
+
+// User
+Route::prefix('user')->group(function () {
+    Route::get('/', [UserController::class, 'index']);
+    Route::post('/', [UserController::class,'store']);
+    Route::put('/{id}', [UserController::class,'update']);
+    Route::delete('/{id}', [UserController::class,'destroy']);
+});
 
 // Counter
 Route::prefix('counter')->group(function () {
@@ -16,7 +25,7 @@ Route::prefix('counter')->group(function () {
     Route::post('/', [CounterController::class,'store']);
     Route::put('/{id}', [CounterController::class,'update']);
     Route::delete('/{id}', [CounterController::class,'destroy']);
-    });
+});
 
 // Employee
 Route::prefix('employee')->group(function () {
