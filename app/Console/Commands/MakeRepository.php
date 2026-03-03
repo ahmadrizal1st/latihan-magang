@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\File;
  * app/Repositories
  *
  * Usage:
- *   php artisan make:repo EmployeeRepository
+ *   php artisan make:repo UserRepository
  *
  */
 
@@ -25,98 +25,79 @@ class MakeRepository extends Command
 
     public function handle()
     {
-        $name = $this->argument('name');
-        $interfaceName = $name . 'RepositoryInterface';
-        $repositoryName = $name . 'Repository';
+        $name           = $this->argument('name');
+        
+        if (!str_ends_with($name, 'Repository')) {
+            $name .= 'Repository';
+        }
 
-        $path = app_path("Repositories/{$repositoryName}.php");
+        $modelName = str_replace('Repository', '', $this->argument('name'));
+        $interfaceName  = $name . 'Interface';
+
+        $path = app_path("Repositories/{$name}.php");
+
+        if (File::exists($path)) {
+            $this->components->error("Repository [{$name}] already exists.");
+            return;
+        }
+
         File::ensureDirectoryExists(dirname($path));
 
         File::put($path, "<?php
 
 namespace App\Repositories;
 
-use App\Models\\{$name};
 use App\Interfaces\\{$interfaceName};
+use App\Models\\{$modelName};
 
-/**
- * Class {$repositoryName}
- *
- * Handle all database interactions for {$name}.
- */
-class {$repositoryName} implements {$interfaceName}
+class {$name} implements {$interfaceName}
 {
-    /**
-     * The {$name} model instance.
-     *
-     * @var {$name}
-     */
-    protected \$model;
+    public function __construct(
+        private {$modelName} \$model
+    ) {}
 
     /**
-     * Constructor.
-     *
-     * @param {$name} \$model
-     */
-    public function __construct({$name} \$model)
-    {
-        \$this->model = \$model;
-    }
-
-    /**
-     * Get all {$name} records with related data.
+     * Get all records with related data.
      */
     public function getAll()
     {
-        return \$this->model->latest()->get();
+        //
     }
 
     /**
-     * Get {$name} by ID.
-     */
-    public function getById(\$id)
-    {
-        return \$this->model->findOrFail(\$id);
-    }
-
-    /**
-     * Search {$name} by keyword.
+     * Search by keyword.
      */
     public function search(string \$keyword)
     {
-        return \$this->model
-            ->where('name', 'like', \"%{\$keyword}%\")
-            ->get();
+        //
     }
 
     /**
-     * Store new {$name}.
+     * Create a new record.
      */
     public function create(array \$data)
     {
-        return \$this->model->create(\$data);
+        //
     }
 
     /**
-     * Update {$name} by ID.
+     * Update an existing record by ID.
      */
     public function update(\$id, array \$data)
     {
-        \$record = \$this->getById(\$id);
-        \$record->update(\$data);
-        return \$record;
+        //
     }
 
     /**
-     * Delete {$name} by ID.
+     * Delete a record by ID.
      */
     public function delete(\$id)
     {
-        return \$this->model->destroy(\$id);
+        //
     }
 }
 ");
 
-        $this->info("Repository created successfully.");
+        $this->components->info("Repository [{$name}] created successfully.");
     }
 }

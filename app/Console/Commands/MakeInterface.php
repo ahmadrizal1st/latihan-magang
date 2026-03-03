@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\File;
  * app/Interfaces
  *
  * Usage:
- *   php artisan make:irepo EmployeeRepositoryInterface
+ *   php artisan make:irepo UserRepositoryInterface
  *
  */
 
@@ -25,75 +25,54 @@ class MakeInterface extends Command
 
     public function handle()
     {
-        
-        $name = $this->argument('name');
-        $interfaceName = $name . 'RepositoryInterface';
-        $repositoryName = $name . 'Repository';
+        $name          = $this->argument('name');
 
-        $path = app_path("Repositories/{$repositoryName}.php");
+        if (!str_ends_with($name, 'RepositoryInterface')) {
+            $name .= 'RepositoryInterface';
+        }
+
+        $path          = app_path("Interfaces/{$name}.php");
+
+        if (File::exists($path)) {
+            $this->components->error("Interface [{$name}] already exists.");
+            return;
+        }
+
         File::ensureDirectoryExists(dirname($path));
 
         File::put($path, "<?php
 
 namespace App\Interfaces;
 
-/**
- * Interface {$interfaceName}
- *
- * Contract for {$name} data access layer.
- */
-interface {$interfaceName}
+interface {$name}
 {
     /**
-     * Get all {$name} records with related data.
-     *
-     * @return mixed
+     * Get all records with related data.
      */
     public function getAll();
 
     /**
-     * Get {$name} by ID with related data.
-     *
-     * @param int \$id
-     * @return mixed
-     */
-    public function getById(\$id);
-
-    /**
-     * Search {$name} by keyword.
-     *
-     * @param string \$keyword
-     * @return mixed
+     * Search by keyword.
      */
     public function search(string \$keyword);
 
     /**
-     * Store new {$name} data.
-     *
-     * @param array \$data
-     * @return mixed
+     * Create a new record.
      */
     public function create(array \$data);
 
     /**
-     * Update {$name} data by ID.
-     *
-     * @param int \$id
-     * @param array \$data
-     * @return mixed
+     * Update an existing record by ID.
      */
     public function update(\$id, array \$data);
 
     /**
-     * Delete {$name} by ID.
-     *
-     * @param int \$id
-     * @return mixed
+     * Delete a record by ID.
      */
     public function delete(\$id);
 }
 ");
 
-        $this->info("Interface created successfully.");
+        $this->components->info("Interface [{$name}] created successfully.");
     }
 }

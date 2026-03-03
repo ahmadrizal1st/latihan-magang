@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Artisan;
  * app/Http/Controllers/Web
  *
  * Usage:
- *   php artisan make:conweb EmployeeController
+ *   php artisan make:conweb UserController
  *
  */
 
@@ -27,11 +27,15 @@ class MakeWebController extends Command
     {
         $name = $this->argument('name');
 
+        if (!str_ends_with($name, 'Controller')) {
+            $name .= 'Controller';
+        }
+
         Artisan::call('make:controller', [
             'name' => 'Web/' . $name,
             '--resource' => true
         ]);
 
-        $this->info("Web Controller created successfully.");
+        $this->components->info("Web Controller created successfully.");
     }
 }

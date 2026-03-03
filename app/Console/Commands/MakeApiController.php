@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Artisan;
  * app/Http/Controllers/Api
  *
  * Usage:
- *   php artisan make:conapi EmployeeController
+ *   php artisan make:conapi UserController
  *
  */
 
@@ -27,11 +27,15 @@ class MakeApiController extends Command
     {
         $name = $this->argument('name');
 
+        if (!str_ends_with($name, 'Controller')) {
+            $name .= 'Controller';
+        }
+
         Artisan::call('make:controller', [
             'name' => 'Api/' . $name,
             '--api' => true
         ]);
 
-        $this->info("API Controller created successfully.");
+        $this->components->info("API Controller created successfully.");
     }
 }

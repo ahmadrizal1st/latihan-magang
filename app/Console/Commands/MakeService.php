@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\File;
  * app/Services
  *
  * Usage:
- *   php artisan make:service EmployeeService
+ *   php artisan make:service UserService
  *
  */
 
@@ -26,84 +26,72 @@ class MakeService extends Command
     public function handle()
     {
         $name = $this->argument('name');
-        $interfaceName = $name . 'RepositoryInterface';
-        $serviceName = $name . 'Service';
 
-        $path = app_path("Services/{$serviceName}.php");
+        if (!str_ends_with($name, 'Service')) {
+            $name .= 'Service';
+        }
+
+        $path = app_path("Services/{$name}.php");
+
+        if (File::exists($path)) {
+            $this->components->error("Service [{$name}] already exists.");
+            return;
+        }
+
         File::ensureDirectoryExists(dirname($path));
+        File::put($path, $this->template($name));
 
-        File::put($path, "<?php
+        $this->components->info("Service [{$name}] created successfully.");
+    }
+
+    private function template(string $name): string
+    {
+        return "<?php
 
 namespace App\Services;
 
-use App\Interfaces\\{$interfaceName};
-
-/**
- * Class {$serviceName}
- *
- * Handle business logic for {$name}.
- */
-class {$serviceName}
+class {$name}
 {
     /**
-     * Repository instance.
-     *
-     * @var {$interfaceName}
-     */
-    protected \$repository;
-
-    /**
-     * Constructor.
-     *
-     * @param {$interfaceName} \$repository
-     */
-    public function __construct({$interfaceName} \$repository)
-    {
-        \$this->repository = \$repository;
-    }
-
-    /**
-     * Get all {$name}.
+     * Get all records.
      */
     public function getAll()
     {
-        return \$this->repository->getAll();
+        //
     }
 
     /**
-     * Get {$name} by ID.
+     * Get record by ID.
      */
     public function getById(\$id)
     {
-        return \$this->repository->getById(\$id);
+        //
     }
 
     /**
-     * Create new {$name}.
+     * Store a newly created record.
      */
     public function create(array \$data)
     {
-        return \$this->repository->create(\$data);
+        //
     }
 
     /**
-     * Update {$name}.
+     * Update the specified record.
      */
     public function update(\$id, array \$data)
     {
-        return \$this->repository->update(\$id, \$data);
+        //
     }
 
     /**
-     * Delete {$name}.
+     * Remove the specified record.
      */
     public function delete(\$id)
     {
-        return \$this->repository->delete(\$id);
+        //
     }
 }
-");
-
-        $this->info("Service created successfully.");
+";
     }
 }

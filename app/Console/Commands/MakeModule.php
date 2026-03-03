@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 
 class MakeModule extends Command
@@ -98,58 +97,49 @@ class MakeModule extends Command
      */
     public function handle()
     {
-        $name = $this->argument('name');
+        $name  = $this->argument('name');
         $flags = $this->argument('flags') ?? '';
 
         // Always create model
-        Artisan::call('make:model', ['name' => $name]);
-        $this->info("Model created.");
+        $this->call('make:model', ['name' => $name]);
+        $this->components->info("Model created.");
 
         if (str_contains($flags, 'm')) {
-            Artisan::call('make:migration', [
-                'name' => 'create_' . strtolower($name) . 's_table',
+            $this->call('make:migration', [
+                'name'     => 'create_' . strtolower($name) . 's_table',
                 '--create' => strtolower($name) . 's'
             ]);
-            $this->info("Migration created.");
+            $this->components->info("Migration created.");
         }
 
         if (str_contains($flags, 's')) {
-            Artisan::call('make:seeder', [
+            $this->call('make:seeder', [
                 'name' => $name . 'Seeder'
             ]);
-            $this->info("Seeder created.");
+            $this->components->info("Seeder created.");
         }
 
         if (str_contains($flags, 'c')) {
-
-            // Web Controller inside Web folder
-            Artisan::call('make:controller', [
-                'name' => 'Web/' . $name . 'Controller',
+            $this->call('make:controller', [
+                'name'       => 'Web/' . $name . 'Controller',
                 '--resource' => true
             ]);
 
-            // API Controller inside Api folder
-            Artisan::call('make:controller', [
-                'name' => 'Api/' . $name . 'Controller',
+            $this->call('make:controller', [
+                'name'  => 'Api/' . $name . 'Controller',
                 '--api' => true
             ]);
 
-            $this->info("Web and API Controllers created inside respective folders.");
+            $this->components->info("Web and API Controllers created.");
         }
 
         if (str_contains($flags, 'r')) {
+            $requestPath = "{$name}";
 
-            $requestPath = "Http/Requests/{$name}";
+            $this->call('make:request', ['name' => "{$requestPath}/Store{$name}"]);
+            $this->call('make:request', ['name' => "{$requestPath}/Update{$name}"]);
 
-            Artisan::call('make:request', [
-                'name' => "{$requestPath}/Store{$name}Request"
-            ]);
-
-            Artisan::call('make:request', [
-                'name' => "{$requestPath}/Update{$name}Request"
-            ]);
-
-            $this->info("Requests created inside folder {$name}.");
+            $this->components->info("Requests created.");
         }
 
         if (str_contains($flags, 'i')) {
@@ -164,7 +154,7 @@ class MakeModule extends Command
             $this->createService($name);
         }
 
-        $this->info("Module {$name} generated successfully");
+        $this->components->info("Module {$name} generated successfully.");
     }
 
     private function createInterface($name)
@@ -235,7 +225,7 @@ interface {$interfaceName}
 }
 ");
 
-        $this->info("Interface created.");
+        $this->components->info("Interface created.");
     }
 
     private function createRepository($name)
@@ -331,7 +321,7 @@ class {$repositoryName} implements {$interfaceName}
 }
 ");
 
-        $this->info("Repository created.");
+        $this->components->info("Repository created.");
     }
 
     private function createService($name)
@@ -414,6 +404,6 @@ class {$serviceName}
 }
 ");
 
-        $this->info("Service created.");
+        $this->components->info("Service created.");
     }
 }
