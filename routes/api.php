@@ -12,80 +12,91 @@ use App\Http\Controllers\Api\VillageController;
 use App\Http\Controllers\Api\LeaveRequestController;
 use Illuminate\Support\Facades\Route;
 
-// User
-Route::prefix('user')->group(function () {
-    Route::get('/', [UserController::class , 'index']);
-    Route::post('/', [UserController::class , 'store']);
-    Route::put('/{id}', [UserController::class , 'update']);
-    Route::delete('/{id}', [UserController::class , 'destroy']);
-});
+Route::middleware('auth:sanctum')->group(function () {
+    // User
+    Route::prefix('user')->group(function () {
+            Route::get('/', [UserController::class , 'index']);
+            Route::post('/', [UserController::class , 'store']);
+            Route::put('/{id}', [UserController::class , 'update']);
+            Route::delete('/{id}', [UserController::class , 'destroy']);
+        }
+        );
 
-// Counter
-Route::prefix('counter')->group(function () {
-    Route::get('/', [CounterController::class , 'index']);
-    Route::post('/', [CounterController::class , 'store']);
-    Route::put('/{id}', [CounterController::class , 'update']);
-    Route::delete('/{id}', [CounterController::class , 'destroy']);
-});
+        // Counter
+        Route::prefix('counter')->group(function () {
+            Route::get('/', [CounterController::class , 'index']);
+            Route::post('/', [CounterController::class , 'store']);
+            Route::put('/{id}', [CounterController::class , 'update']);
+            Route::delete('/{id}', [CounterController::class , 'destroy']);
+        }
+        );
 
-// Employee
-Route::prefix('employee')->group(function () {
-    Route::get('/', [EmployeeController::class , 'index']);
-    Route::post('/', [EmployeeController::class , 'store']);
-    Route::put('/{id}', [EmployeeController::class , 'update']);
-    Route::delete('/{id}', [EmployeeController::class , 'destroy']);
-    Route::post('/id-card/bulk', [EmployeeController::class , 'downloadIdCardBulk']);
-    Route::get('/{id}/id-card', [EmployeeController::class , 'downloadIdCard']);
-});
+        // Employee
+        Route::prefix('employee')->group(function () {
+            Route::get('/', [EmployeeController::class , 'index']);
+            Route::post('/', [EmployeeController::class , 'store']);
+            Route::put('/{id}', [EmployeeController::class , 'update']);
+            Route::delete('/{id}', [EmployeeController::class , 'destroy']);
+            Route::post('/id-card/bulk', [EmployeeController::class , 'downloadIdCardBulk']);
+            Route::get('/{id}/id-card', [EmployeeController::class , 'downloadIdCard']);
+        }
+        );
 
-// Employee Job
-Route::prefix('job')->group(function () {
-    Route::get('/', [EmployeeJobController::class , 'index']);
-    Route::post('/', [EmployeeJobController::class , 'store']);
-    Route::put('/{id}', [EmployeeJobController::class , 'update']);
-    Route::delete('/{id}', [EmployeeJobController::class , 'destroy']);
-});
+        // Employee Job
+        Route::prefix('job')->group(function () {
+            Route::get('/', [EmployeeJobController::class , 'index']);
+            Route::post('/', [EmployeeJobController::class , 'store']);
+            Route::put('/{id}', [EmployeeJobController::class , 'update']);
+            Route::delete('/{id}', [EmployeeJobController::class , 'destroy']);
+        }
+        );
 
-// Province
-Route::prefix('province')->group(function () {
-    Route::get('/', [ProvinceController::class , 'index']);
-    Route::post('/', [ProvinceController::class , 'store']);
-    Route::put('/{id}', [ProvinceController::class , 'update']);
-    Route::delete('/{id}', [ProvinceController::class , 'destroy']);
-});
+        // Province
+        Route::prefix('province')->group(function () {
+            Route::get('/', [ProvinceController::class , 'index']);
+            Route::post('/', [ProvinceController::class , 'store']);
+            Route::put('/{id}', [ProvinceController::class , 'update']);
+            Route::delete('/{id}', [ProvinceController::class , 'destroy']);
+        }
+        );
 
-// City
-Route::prefix('city')->group(function () {
-    Route::get('/', [CityController::class , 'index']);
-    Route::post('/', [CityController::class , 'store']);
-    Route::put('/{id}', [CityController::class , 'update']);
-    Route::delete('/{id}', [CityController::class , 'destroy']);
-});
+        // City
+        Route::prefix('city')->group(function () {
+            Route::get('/', [CityController::class , 'index']);
+            Route::post('/', [CityController::class , 'store']);
+            Route::put('/{id}', [CityController::class , 'update']);
+            Route::delete('/{id}', [CityController::class , 'destroy']);
+        }
+        );
 
-// District
-Route::prefix('district')->group(function () {
-    Route::get('/', [DistrictController::class , 'index']);
-    Route::post('/', [DistrictController::class , 'store']);
-    Route::put('/{id}', [DistrictController::class , 'update']);
-    Route::delete('/{id}', [DistrictController::class , 'destroy']);
-});
+        // District
+        Route::prefix('district')->group(function () {
+            Route::get('/', [DistrictController::class , 'index']);
+            Route::post('/', [DistrictController::class , 'store']);
+            Route::put('/{id}', [DistrictController::class , 'update']);
+            Route::delete('/{id}', [DistrictController::class , 'destroy']);
+        }
+        );
 
-// Village
-Route::prefix('village')->group(function () {
-    Route::get('/', [VillageController::class , 'index']);
-    Route::post('/', [VillageController::class , 'store']);
-    Route::put('/{id}', [VillageController::class , 'update']);
-    Route::delete('/{id}', [VillageController::class , 'destroy']);
-});
+        // Village
+        Route::prefix('village')->group(function () {
+            Route::get('/', [VillageController::class , 'index']);
+            Route::post('/', [VillageController::class , 'store']);
+            Route::put('/{id}', [VillageController::class , 'update']);
+            Route::delete('/{id}', [VillageController::class , 'destroy']);
+        }
+        );
 
-// Setting
-Route::get('setting', [SettingController::class , 'show']);
-Route::put('setting', [SettingController::class , 'update']);
+        // Setting
+        Route::get('setting', [SettingController::class , 'show']);
+        Route::put('setting', [SettingController::class , 'update']);
 
-// Leave Request
-Route::prefix('leave-request')->group(function () {
-    Route::get('/', [LeaveRequestController::class , 'index']);
-    Route::post('/', [LeaveRequestController::class , 'store']);
-    Route::put('/{id}', [LeaveRequestController::class , 'update']);
-    Route::delete('/{id}', [LeaveRequestController::class , 'destroy']);
-});
+        // Leave Request
+        Route::prefix('leave-request')->group(function () {
+            Route::get('/', [LeaveRequestController::class , 'index']);
+            Route::post('/', [LeaveRequestController::class , 'store']);
+            Route::put('/{id}', [LeaveRequestController::class , 'update']);
+            Route::delete('/{id}', [LeaveRequestController::class , 'destroy']);
+        }
+        );
+    });

@@ -223,137 +223,213 @@
         </div>
     </div>
 </div>
-
 @endsection
 
 @pushOnce('scripts')
 <script>
-        $(function ()                //         ct2
-        function makeSelect2($el, url, placeholder, ext            ) {
-            if ($el.hasClass('select2-hidden-accessible')) $el.sele            troy');
-                      lect2({
-            dropdownParent: $el                odal'),
-         placehold                der,
-        allow                
-                minimu                : 0,
-                       x:                            rl,
-                                  'json                           ay: 300,
-                                         arams) {
-                        var q                         erm ?? '' };
-                        if (typeof extraParams === 'fu                         extraPara                                           rn q;
+    $(function () {
+
+        // Helper: Select2
+        function makeSelect2($el, url, placeholder, extraParams) {
+            if ($el.hasClass('select2-hidden-accessible')) {
+                $el.select2('destroy');
+            }
+            $el.select2({
+                dropdownParent: $el.closest('.modal'),
+                placeholder: placeholder,
+                allowClear: true,
+                minimumInputLength: 0,
+                ajax: {
+                    url: url,
+                    dataType: 'json',
+                    delay: 300,
+                    data: function (params) {
+                        var q = { search: params.term ?? '' };
+                        if (typeof extraParams === 'function') {
+                            $.extend(q, extraParams());
+                        }
+                        return q;
                     },
-                                 sults: function (response) {
-                        var it                        ts ?? res                                                    return {
-                                       : $.map(items, function (item) {
-                                re                            : i                        e ?                                                   })
+                    processResults: function (response) {
+                        var items = response.data ?? response;
+                        return {
+                            results: $.map(items, function (item) {
+                                return {
+                                    id: item.id,
+                                    text: item.name ? (item.nip ? item.nip + ' - ' + item.name : item.name) : item.text
                                 };
-                            },
-                    cache: fa                        }
-                });
+                            })
+                        };
+                    },
+                    cache: false
+                }
+            });
         }
 
         function setSelect2Val($el, id, text) {
             if (!id) return;
-                 f (!$el.find('option[value="' +        + '        .length) $el.a        d(new Option(text, id, true, true));
-                       (id).trigger('change');
+            if (!$el.find('option[value="' + id + '"]').length) {
+                $el.append(new Option(text, id, true, true));
+            }
+            $el.val(id).trigger('change');
         }
 
-        // Validati               function handleValidationErrors(xhr, formSel)                   $(formSel + ' .form-group').remo            'has-error');
-                   ormSel + ' .help-block.error-msg').remove();                 var errors = xhr.responseJSON?.errors;
-            i                return;
-            $.each(errors, function (field, m                               var $input = $(formSel + ' [name="' + field + '"]');
-                       put.        est        orm-group').a        ass('has-error');
-                $inpu            '<span class="help            rror-msg">' + mess            + '</sp');
-                });
+        // Helper: Validation errors
+        function handleValidationErrors(xhr, formSel) {
+            $(formSel + ' .form-group').removeClass('has-error');
+            $(formSel + ' .help-block.error-msg').remove();
+            var errors = xhr.responseJSON?.errors;
+            if (!errors) return;
+            $.each(errors, function (field, messages) {
+                var $input = $(formSel + ' [name="' + field + '"]');
+                $input.closest('.form-group').addClass('has-error');
+                $input.after('<span class="help-block error-msg">' + messages[0] + '</span>');
+            });
         }
 
-               DataTable        v             = $('#e                taTble({
-            process                           se                ue,
+        // DataTable
+        var table = $('#example1').DataTable({
+            processing: true,
+            serverSide: true,
             scrollX: true,
-            responsive                            autoWidth:                        ajax: {
-              url: '/api/le -request',
-                type: 'GET',                     data: function (d)  d.datatable = true;  turn d; }
+            responsive: false,
+            autoWidth: false,
+            ajax: {
+                url: '/api/leave-request',
+                type: 'GET',
+                data: function (d) {
+                    d.datatable = true;
+                    return d;
+                }
             },
             columns: [
-                            'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-                { data: 'employee                 'employee_nip' e: false, search                 defaultContent:                 { d                ee_name', name: 'empl _name', orderable: fal                le: false, defaultC : '-' },
-                            'type', name: 'type'                  { data:                am                                                    t_date', name: 'st                                 { data                    me: 'end_date' },
-                { d                        name: 'return                              {
+                { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+                { data: 'employee_nip', name: 'employee_nip', orderable: false, searchable: false, defaultContent: '-' },
+                { data: 'employee_name', name: 'employee_name', orderable: false, searchable: false, defaultContent: '-' },
+                { data: 'type', name: 'type' },
+                { data: 'reason', name: 'reason' },
+                { data: 'start_date', name: 'start_date' },
+                { data: 'end_date', name: 'end_date' },
+                { data: 'return_date', name: 'return_date' },
+                {
                     data: null,
-                                                         se se,
-   der: f                                                    e = row;
-                  ret                            arning btn-xs btn-edit"'
-                       + ' data-i                                             mployee-i oyee_id ?? ''                                   + ' data-em me="' + (e. e ?? '') + '"                             + ' data-type="' + (e  ?? '') + '"'
-                                           .reason ?? '') + '"'                ' data-start                            ') + '"'
-                         + ' da date="' + (e.e                                                + ' data-return-date="' + (e                            '
-                            + '<i class="fa fa-penc                                                    + '<b                            tn-xs btn-delete"'
-                            +                     .i                                                     + '<i clas        a fa-trash"></i> Delete</button>';
+                    orderable: false,
+                    searchable: false,
+                    render: function (data, type, row) {
+                        var e = row;
+                        return '<button class="btn btn-warning btn-xs btn-edit"'
+                            + ' data-id="' + (e.id ?? '') + '"'
+                            + ' data-employee-id="' + (e.employee_id ?? '') + '"'
+                            + ' data-employee-name="' + (e.employee_name ?? '') + '"'
+                            + ' data-type="' + (e.type ?? '') + '"'
+                            + ' data-reason="' + (e.reason ?? '') + '"'
+                            + ' data-start-date="' + (e.start_date ?? '') + '"'
+                            + ' data-end-date="' + (e.end_date ?? '') + '"'
+                            + ' data-return-date="' + (e.return_date ?? '') + '">'
+                            + '<i class="fa fa-pencil"></i> Edit</button> '
+                            + '<button class="btn btn-danger btn-xs btn-delete"'
+                            + ' data-id="' + (e.id ?? '') + '">'
+                            + '<i class="fa fa-trash"></i> Delete</button>';
                     }
-                    }
+                }
             ]
         });
 
         // Create
-        $('#modalCreateLeaveRequest').on('show.bs.modal        uncti        ) {
-            makeSelect2($('#formCreateLeaveRequest .s            mployee'), '/api/emp            '-- Select Employee --');
+        $('#modalCreateLeaveRequest').on('show.bs.modal', function () {
+            makeSelect2($('#formCreateLeaveRequest .select2-employee'), '/api/employee', '-- Select Employee --');
         });
 
         $('#formCreateLeaveRequest').on('submit', function (e) {
-            e.preven            ();
-                     btns).find('[type="submit"]'                bled).html('<i                a-spa-spin"></i> Saving...'                    $.aax({
+            e.preventDefault();
+            var $form = $(this);
+            var $btn = $form.find('[type="submit"]').prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Saving...');
+            $.ajax({
                 url: '/api/leave-request',
                 type: 'POST',
-                       a: $(s).serialize(),
-                success: function () { $('#modalCreateLeaveReq                ('hide'); table.ajax.reload(); },
-                error: function (xhr) { handleValidationErrors            form        teLea        quest');                        complete: function () { $btn.prop('dis            false).html('<i class            save"></i> Save'); }
+                data: $form.serialize(),
+                success: function () {
+                    $('#modalCreateLeaveRequest').modal('hide');
+                    table.ajax.reload();
+                },
+                error: function (xhr) {
+                    handleValidationErrors(xhr, '#formCreateLeaveRequest');
+                },
+                complete: function () {
+                    $btn.prop('disabled', false).html('<i class="fa fa-save"></i> Save');
+                }
             });
-        })               // Edit
-        $('#example1').on('click'            edit', function () {
-            var $btn = $(th                      $('#editLeaveRequestId').val($btn.data('id'))                  $('#editLeaveType').val($btn.data('type'));
-                $('#editLeaveReason').val($btn.data('reason'));
-                   #editLeaveStartDate').val($btn.data('start-date'));
-            $('#            eEndDate').val($btn.data('end-date'));
-            $('#editLeaveReturnDa            ($btn.data('return-date'));
-
-            var $employeeSelect = $('#formEditLeaveRequest            2-employee');
-            makeSelect2($empl        Selec        /api/employee', '-- Select Employee --');
-            s            2Val($employeeSelect            ata('e oyee-id'), $btn.data('employee-nam                       $('#modalEditLeaveRequest').modal('show');
         });
 
-        $('#formEditLeaveRequest').on('submit', function (e                    e                ult        var id = $('#editLeaveR                al()       va                his)[type="submit"]').prop(                true).hml('<i class="fa fa-spinner fa-spin"></i> Updating...');
+        // Edit
+        $('#example1').on('click', '.btn-edit', function () {
+            var $btn = $(this);
+            $('#editLeaveRequestId').val($btn.data('id'));
+            $('#editLeaveType').val($btn.data('type'));
+            $('#editLeaveReason').val($btn.data('reason'));
+            $('#editLeaveStartDate').val($btn.data('start-date'));
+            $('#editLeaveEndDate').val($btn.data('end-date'));
+            $('#editLeaveReturnDate').val($btn.data('return-date'));
 
+            var $employeeSelect = $('#formEditLeaveRequest .select2-employee');
+            makeSelect2($employeeSelect, '/api/employee', '-- Select Employee --');
+            setSelect2Val($employeeSelect, $btn.data('employee-id'), $btn.data('employee-name'));
+
+            $('#modalEditLeaveRequest').modal('show');
+        });
+
+        $('#formEditLeaveRequest').on('submit', function (e) {
+            e.preventDefault();
+            var $form = $(this);
+            var id = $('#editLeaveRequestId').val();
+            var $btn = $form.find('[type="submit"]').prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Updating...');
             $.ajax({
-                               leavequest/' + id,
+                url: '/api/leave-request/' + id,
                 type: 'PUT',
-                data: $(this).ser                              success: function () { $('#modalEditLeaveRequest').modal('hide'); table.ajax.reload(            lse)        
-                    er         function (xhr) { handleValidationErrors(xhr, '#formEdit            uest'); },
-                complete: function () { $            ('disabled', false).html('<i class="fa fa-sav        /i> U        e'); }
+                data: $form.serialize(),
+                success: function () {
+                    $('#modalEditLeaveRequest').modal('hide');
+                    table.ajax.reload(null, false);
+                },
+                error: function (xhr) {
+                    handleValidationErrors(xhr, '#formEditLeaveRequest');
+                },
+                complete: function () {
+                    $btn.prop('disabled', false).html('<i class="fa fa-save"></i> Update');
+                }
             });
         });
 
-        // De                 $ example1').on('click', '.btn-delete'            on () {
+        // Delete
+        $('#example1').on('click', '.btn-delete', function () {
             $('#deleteLeaveRequestId').val($(this).data('id'));
-            $('#modalDeleteLea            t').modal                   );
+            $('#modalDeleteLeaveRequest').modal('show');
+        });
 
-        $('#btnConfirmDelet                k', ction () {
-                 ar id =$('#deleteLeaveRequestId').val();
-            var $btn = $(this).prop('disabled', true).html('<i                a-spir fa-spin"></i> Deleting...');
-
+        $('#btnConfirmDelete').on('click', function () {
+            var id = $('#deleteLeaveRequestId').val();
+            var $btn = $(this).prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Deleting...');
             $.ajax({
-                            pi/leave-request/' + id,
+                url: '/api/leave-request/' + id,
                 type: 'DELETE',
-                success: function () { $('            lete        eRequ        ).modal('hide')        ble.ajax.reload(null, false); },
-                error: function () { alert('Failed to del            ase try again.'); },
-                         ete: function () {             p('disabled', false).html('<i class="fa fa-trash"><                ; }
+                success: function () {
+                    $('#modalDeleteLeaveRequest').modal('hide');
+                    table.ajax.reload(null, false);
+                },
+                error: function () {
+                    alert('Failed to delete. Please try again.');
+                },
+                complete: function () {
+                    $btn.prop('disabled', false).html('<i class="fa fa-trash"></i> Delete');
+                }
             });
         });
 
-        // Reset modal
-        $('#modalCreate                , #modalEditLeave            ).on            .bs.modal', function () {
-            var $form = $(            nd('form');
+        // Reset modal on close
+        $('#modalCreateLeaveRequest, #modalEditLeaveRequest').on('hidden.bs.modal', function () {
+            var $form = $(this).find('form');
             $form[0].reset();
-
-                    $formct2-employee').each(function () {
+            $form.find('.select2-employee').each(function () {
                 if ($(this).hasClass('select2-hidden-accessible')) $(this).select2('destroy');
                 $(this).empty();
             });

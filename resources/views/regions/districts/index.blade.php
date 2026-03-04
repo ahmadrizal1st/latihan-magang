@@ -5,7 +5,7 @@
 @section('page-subtitle', 'Table')
 
 @section('breadcrumb')
-    <li class="active">District</li>
+<li class="active">District</li>
 @endsection
 
 @section('content')
@@ -17,7 +17,8 @@
                 <div class="box-header">
                     <h3 class="box-title">District Data Table</h3>
                     <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalCreateDistrict">
+                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                            data-target="#modalCreateDistrict">
                             <i class="fa fa-plus"></i> Add District
                         </button>
                     </div>
@@ -69,13 +70,15 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="districtCityId">City <span class="text-red">*</span></label>
-                        <select class="form-control select2-city" id="districtCityId" name="city_id" style="width: 100%;">
+                        <select class="form-control select2-city" id="districtCityId" name="city_id"
+                            style="width: 100%;">
                             <option value="">-- Select City --</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="districtName">District Name <span class="text-red">*</span></label>
-                        <input type="text" class="form-control" id="districtName" name="name" placeholder="Enter district name...">
+                        <input type="text" class="form-control" id="districtName" name="name"
+                            placeholder="Enter district name...">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -108,13 +111,15 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="editDistrictCityId">City <span class="text-red">*</span></label>
-                        <select class="form-control select2-city" id="editDistrictCityId" name="city_id" style="width: 100%;">
+                        <select class="form-control select2-city" id="editDistrictCityId" name="city_id"
+                            style="width: 100%;">
                             <option value="">-- Select City --</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="editDistrictName">District Name <span class="text-red">*</span></label>
-                        <input type="text" class="form-control" id="editDistrictName" name="name" placeholder="Enter district name...">
+                        <input type="text" class="form-control" id="editDistrictName" name="name"
+                            placeholder="Enter district name...">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -163,206 +168,206 @@
 
 @pushOnce('scripts')
 <script>
-$(function () {
+    $(function () {
 
-    // INIT SELECT2 CITY
-    function initSelect2City(selector, modalSelector) {
-        $(selector).select2({
-            placeholder: '-- Select City --',
-            allowClear: true,
-            dropdownParent: $(modalSelector),
-            ajax: {
-                url: '/api/city',
-                type: 'GET',
-                dataType: 'json',
-                delay: 300,
-                data: function (params) {
-                    return {
-                        search: params.term || '',
-                        page: params.page || 1
-                    };
+        // INIT SELECT2 CITY
+        function initSelect2City(selector, modalSelector) {
+            $(selector).select2({
+                placeholder: '-- Select City --',
+                allowClear: true,
+                dropdownParent: $(modalSelector),
+                ajax: {
+                    url: '/api/city',
+                    type: 'GET',
+                    dataType: 'json',
+                    delay: 300,
+                    data: function (params) {
+                        return {
+                            search: params.term || '',
+                            page: params.page || 1
+                        };
+                    },
+                    processResults: function (response) {
+                        return {
+                            results: response.results,
+                            pagination: response.pagination ?? { more: false }
+                        };
+                    },
+                    cache: true
                 },
-                processResults: function (response) {
-                    return {
-                        results: response.results,
-                        pagination: response.pagination ?? { more: false }
-                    };
-                },
-                cache: true
-            },
-            minimumInputLength: 0
-        });
-    }
-
-    initSelect2City('#districtCityId',     '#modalCreateDistrict');
-    initSelect2City('#editDistrictCityId', '#modalEditDistrict');
-
-
-    // DATATABLE
-    var table = $('#example1').DataTable({
-        processing: true,
-        serverSide: true,
-        scrollX: true,
-        responsive: true,
-        autoWidth: false,
-        ajax: {
-            url: '/api/district',
-            type: 'GET',
-            data: function(d) {
-                d.datatable = true;
-                return d;
-            }
-        },
-        columns: [
-            { data: 'DT_RowIndex',     name: 'DT_RowIndex', orderable: false, searchable: false },
-            { data: 'name',            name: 'name' },
-            { data: 'province_name',   name: 'province_name', orderable: false, searchable: false },
-            { data: 'city_name',       name: 'city_name', orderable: false, searchable: false },
-            { data: 'employees_count', name: 'employees_count', searchable: false, orderable: false, defaultContent: 0 },
-            {
-                data: 'id',
-                orderable: false,
-                searchable: false,
-                render: function(data, type, row) {
-                    var e = row;
-                    return '<button class="btn btn-warning btn-xs btn-edit"'
-                             + ' data-id="'             + e.id                     + '"'
-                             + ' data-name="'           + (e.name              ?? '') + '"'
-                             + ' data-province-id="'    + (e.province_id       ?? '') + '"'
-                             + ' data-province-name="'  + (e.province_name     ?? '') + '"'
-                             + ' data-city-id="'        + (e.city_id           ?? '') + '"'
-                             + ' data-city-name="'      + (e.city_name         ?? '') + '">'
-                             + '<i class="fa fa-pencil"></i> Edit</button> '
-                         + '<button class="btn btn-danger btn-xs btn-delete"'
-                             + ' data-id="' + e.id + '" data-name="' + e.name + '">'
-                             + '<i class="fa fa-trash"></i> Delete</button>';
-                }
-            }
-        ],
-    });
-
-
-    // CREATE
-    $('#formCreateDistrict').on('submit', function(e) {
-        e.preventDefault();
-        var $btn = $(this).find('[type="submit"]');
-        $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Saving...');
-
-        $.ajax({
-            url: '/api/district',
-            type: 'POST',
-            data: $(this).serialize(),
-            success: function() {
-                $('#modalCreateDistrict').modal('hide');
-                table.ajax.reload();
-            },
-            error: function(xhr) {
-                handleValidationErrors(xhr, '#formCreateDistrict');
-            },
-            complete: function() {
-                $btn.prop('disabled', false).html('<i class="fa fa-save"></i> Save');
-            }
-        });
-    });
-
-
-    // OPEN EDIT MODAL
-    $('#example1').on('click', '.btn-edit', function() {
-        var cityId   = $(this).data('city-id');
-        var cityName = $(this).data('city-name');
-
-        $('#editDistrictId').val($(this).data('id'));
-        $('#editDistrictName').val($(this).data('name'));
-
-        // Set nilai Select2 secara programatik
-        var $select = $('#editDistrictCityId');
-        if ($select.find('option[value="' + cityId + '"]').length === 0) {
-            $select.append(new Option(cityName, cityId, true, true));
-        }
-        $select.val(cityId).trigger('change');
-
-        $('#modalEditDistrict').modal('show');
-    });
-
-
-    // EDIT SUBMIT
-    $('#formEditDistrict').on('submit', function(e) {
-        e.preventDefault();
-        var id   = $('#editDistrictId').val();
-        var $btn = $(this).find('[type="submit"]');
-        $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Updating...');
-
-        $.ajax({
-            url: '/api/district/' + id,
-            type: 'PUT',
-            data: $(this).serialize(),
-            success: function() {
-                $('#modalEditDistrict').modal('hide');
-                table.ajax.reload(null, false);
-            },
-            error: function(xhr) {
-                handleValidationErrors(xhr, '#formEditDistrict');
-            },
-            complete: function() {
-                $btn.prop('disabled', false).html('<i class="fa fa-save"></i> Update');
-            }
-        });
-    });
-
-
-    // OPEN DELETE MODAL
-    $('#example1').on('click', '.btn-delete', function() {
-        $('#deleteDistrictId').val($(this).data('id'));
-        $('#deleteDistrictName').text($(this).data('name'));
-        $('#modalDeleteDistrict').modal('show');
-    });
-
-
-    // CONFIRM DELETE
-    $('#btnConfirmDeleteDistrict').on('click', function() {
-        var id   = $('#deleteDistrictId').val();
-        var $btn = $(this);
-        $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Deleting...');
-
-        $.ajax({
-            url: '/api/district/' + id,
-            type: 'DELETE',
-            success: function() {
-                $('#modalDeleteDistrict').modal('hide');
-                table.ajax.reload(null, false);
-            },
-            error: function() {
-                alert('Failed to delete. Please try again.');
-            },
-            complete: function() {
-                $btn.prop('disabled', false).html('<i class="fa fa-trash"></i> Delete');
-            }
-        });
-    });
-
-
-    // RESET MODALS ON CLOSE
-    $('#modalCreateDistrict, #modalEditDistrict').on('hidden.bs.modal', function() {
-        $(this).find('form')[0].reset();
-        $(this).find('.form-group').removeClass('has-error');
-        $(this).find('.help-block.error-msg').remove();
-        $(this).find('.select2-city').val(null).trigger('change');
-    });
-
-
-    // VALIDATION HELPER
-    function handleValidationErrors(xhr, formSelector) {
-        $(formSelector + ' .form-group').removeClass('has-error');
-        $(formSelector + ' .help-block.error-msg').remove();
-        var errors = xhr.responseJSON?.errors;
-        if (errors) {
-            $.each(errors, function(field, messages) {
-                var $input = $(formSelector + ' [name="' + field + '"]');
-                $input.closest('.form-group').addClass('has-error');
-                $input.after('<span class="help-block error-msg">' + messages[0] + '</span>');
+                minimumInputLength: 0
             });
         }
-    }
-});
+
+        initSelect2City('#districtCityId', '#modalCreateDistrict');
+        initSelect2City('#editDistrictCityId', '#modalEditDistrict');
+
+
+        // DATATABLE
+        var table = $('#example1').DataTable({
+            processing: true,
+            serverSide: true,
+            scrollX: true,
+            responsive: true,
+            autoWidth: false,
+            ajax: {
+                url: '/api/district',
+                type: 'GET',
+                data: function (d) {
+                    d.datatable = true;
+                    return d;
+                }
+            },
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+                { data: 'name', name: 'name' },
+                { data: 'province_name', name: 'province_name', orderable: false, searchable: false },
+                { data: 'city_name', name: 'city_name', orderable: false, searchable: false },
+                { data: 'employees_count', name: 'employees_count', searchable: false, orderable: false, defaultContent: 0 },
+                {
+                    data: 'id',
+                    orderable: false,
+                    searchable: false,
+                    render: function (data, type, row) {
+                        var e = row;
+                        return '<button class="btn btn-warning btn-xs btn-edit"'
+                            + ' data-id="' + e.id + '"'
+                            + ' data-name="' + (e.name ?? '') + '"'
+                            + ' data-province-id="' + (e.province_id ?? '') + '"'
+                            + ' data-province-name="' + (e.province_name ?? '') + '"'
+                            + ' data-city-id="' + (e.city_id ?? '') + '"'
+                            + ' data-city-name="' + (e.city_name ?? '') + '">'
+                            + '<i class="fa fa-pencil"></i> Edit</button> '
+                            + '<button class="btn btn-danger btn-xs btn-delete"'
+                            + ' data-id="' + e.id + '" data-name="' + e.name + '">'
+                            + '<i class="fa fa-trash"></i> Delete</button>';
+                    }
+                }
+            ],
+        });
+
+
+        // CREATE
+        $('#formCreateDistrict').on('submit', function (e) {
+            e.preventDefault();
+            var $btn = $(this).find('[type="submit"]');
+            $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Saving...');
+
+            $.ajax({
+                url: '/api/district',
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function () {
+                    $('#modalCreateDistrict').modal('hide');
+                    table.ajax.reload();
+                },
+                error: function (xhr) {
+                    handleValidationErrors(xhr, '#formCreateDistrict');
+                },
+                complete: function () {
+                    $btn.prop('disabled', false).html('<i class="fa fa-save"></i> Save');
+                }
+            });
+        });
+
+
+        // OPEN EDIT MODAL
+        $('#example1').on('click', '.btn-edit', function () {
+            var cityId = $(this).data('city-id');
+            var cityName = $(this).data('city-name');
+
+            $('#editDistrictId').val($(this).data('id'));
+            $('#editDistrictName').val($(this).data('name'));
+
+            // Set nilai Select2 secara programatik
+            var $select = $('#editDistrictCityId');
+            if ($select.find('option[value="' + cityId + '"]').length === 0) {
+                $select.append(new Option(cityName, cityId, true, true));
+            }
+            $select.val(cityId).trigger('change');
+
+            $('#modalEditDistrict').modal('show');
+        });
+
+
+        // EDIT SUBMIT
+        $('#formEditDistrict').on('submit', function (e) {
+            e.preventDefault();
+            var id = $('#editDistrictId').val();
+            var $btn = $(this).find('[type="submit"]');
+            $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Updating...');
+
+            $.ajax({
+                url: '/api/district/' + id,
+                type: 'PUT',
+                data: $(this).serialize(),
+                success: function () {
+                    $('#modalEditDistrict').modal('hide');
+                    table.ajax.reload(null, false);
+                },
+                error: function (xhr) {
+                    handleValidationErrors(xhr, '#formEditDistrict');
+                },
+                complete: function () {
+                    $btn.prop('disabled', false).html('<i class="fa fa-save"></i> Update');
+                }
+            });
+        });
+
+
+        // OPEN DELETE MODAL
+        $('#example1').on('click', '.btn-delete', function () {
+            $('#deleteDistrictId').val($(this).data('id'));
+            $('#deleteDistrictName').text($(this).data('name'));
+            $('#modalDeleteDistrict').modal('show');
+        });
+
+
+        // CONFIRM DELETE
+        $('#btnConfirmDeleteDistrict').on('click', function () {
+            var id = $('#deleteDistrictId').val();
+            var $btn = $(this);
+            $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Deleting...');
+
+            $.ajax({
+                url: '/api/district/' + id,
+                type: 'DELETE',
+                success: function () {
+                    $('#modalDeleteDistrict').modal('hide');
+                    table.ajax.reload(null, false);
+                },
+                error: function () {
+                    alert('Failed to delete. Please try again.');
+                },
+                complete: function () {
+                    $btn.prop('disabled', false).html('<i class="fa fa-trash"></i> Delete');
+                }
+            });
+        });
+
+
+        // RESET MODALS ON CLOSE
+        $('#modalCreateDistrict, #modalEditDistrict').on('hidden.bs.modal', function () {
+            $(this).find('form')[0].reset();
+            $(this).find('.form-group').removeClass('has-error');
+            $(this).find('.help-block.error-msg').remove();
+            $(this).find('.select2-city').val(null).trigger('change');
+        });
+
+
+        // VALIDATION HELPER
+        function handleValidationErrors(xhr, formSelector) {
+            $(formSelector + ' .form-group').removeClass('has-error');
+            $(formSelector + ' .help-block.error-msg').remove();
+            var errors = xhr.responseJSON?.errors;
+            if (errors) {
+                $.each(errors, function (field, messages) {
+                    var $input = $(formSelector + ' [name="' + field + '"]');
+                    $input.closest('.form-group').addClass('has-error');
+                    $input.after('<span class="help-block error-msg">' + messages[0] + '</span>');
+                });
+            }
+        }
+    });
 </script>
 @endPushOnce

@@ -35,13 +35,18 @@
         </a>
       </li>
       <li>
+        <a href="{{ url('leave-request') }}">
+          <i class="fa fa-calendar"></i> <span>Leave Request</span>
+        </a>
+      </li>
+      <li>
         <a href="{{ url('job') }}">
           <i class="fa fa-briefcase"></i> <span>Job</span>
         </a>
       </li>
       <li>
         <a href="{{ url('user') }}">
-          <i class="fa fa-user"></i> <span>Job</span>
+          <i class="fa fa-user"></i> <span>User</span>
         </a>
       </li>
 

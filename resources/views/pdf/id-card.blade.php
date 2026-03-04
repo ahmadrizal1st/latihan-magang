@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <title>ID Card Karyawan</title>
@@ -24,6 +25,7 @@
             height: 54mm;
             overflow: hidden;
         }
+
         .card-page:last-child {
             page-break-after: avoid;
         }
@@ -168,83 +170,85 @@
         }
     </style>
 </head>
+
 <body>
 
-@foreach ($employees as $employee)
-<div class="card-page">
-    <div class="id-card">
+    @foreach ($employees as $employee)
+    <div class="card-page">
+        <div class="id-card">
 
-        <!-- Header -->
-        <div class="card-header">
-            <div class="company-name">{{ $settings->company_name ?? 'PT. PERUSAHAAN INDONESIA' }}</div>
-            <div class="card-title">KARTU TANDA KARYAWAN</div>
-        </div>
-        <div class="accent-bar"></div>
+            <!-- Header -->
+            <div class="card-header">
+                <div class="company-name">{{ $settings->company_name ?? 'PT. PERUSAHAAN INDONESIA' }}</div>
+                <div class="card-title">KARTU TANDA KARYAWAN</div>
+            </div>
+            <div class="accent-bar"></div>
 
-        <!-- Body -->
-        <div class="card-body">
+            <!-- Body -->
+            <div class="card-body">
 
-            <!-- Foto -->
-            <div class="photo-col">
-                <div class="photo-wrapper">
-                    @if (!empty($employee['photo_base64']))
+                <!-- Foto -->
+                <div class="photo-col">
+                    <div class="photo-wrapper">
+                        @if (!empty($employee['photo_base64']))
                         <img src="{{ $employee['photo_base64'] }}" alt="foto">
-                    @else
+                        @else
                         <span>FOTO</span>
-                    @endif
+                        @endif
+                    </div>
                 </div>
-            </div>
 
-            <!-- Info -->
-            <div class="info-col">
-                <div class="employee-name">{{ $employee['name'] }}</div>
-                <div class="employee-nip">NIP: <strong>{{ $employee['nip'] }}</strong></div>
-                <div class="employee-position">{{ $employee['job'] }}</div>
+                <!-- Info -->
+                <div class="info-col">
+                    <div class="employee-name">{{ $employee['name'] }}</div>
+                    <div class="employee-nip">NIP: <strong>{{ $employee['nip'] }}</strong></div>
+                    <div class="employee-position">{{ $employee['job'] }}</div>
 
-                <table class="info-table">
-                    <tr>
-                        <td class="label">Tgl Lahir</td>
-                        <td class="separator">:</td>
-                        <td class="value">{{ $employee['date_of_birth'] }}</td>
-                    </tr>
-                    <tr>
-                        <td class="label">Tempat Lahir</td>
-                        <td class="separator">:</td>
-                        <td class="value">{{ $employee['place_of_birth'] }}</td>
-                    </tr>
-                    <tr>
-                        <td class="label">Provinsi</td>
-                        <td class="separator">:</td>
-                        <td class="value">{{ $employee['province'] }}</td>
-                    </tr>
-                    <tr>
-                        <td class="label">Kabupaten</td>
-                        <td class="separator">:</td>
-                        <td class="value">{{ $employee['city'] }}</td>
-                    </tr>
-                    <tr>
-                        <td class="label">Kecamatan</td>
-                        <td class="separator">:</td>
-                        <td class="value">{{ $employee['district'] }}</td>
-                    </tr>
-                    <tr>
-                        <td class="label">Kelurahan</td>
-                        <td class="separator">:</td>
-                        <td class="value">{{ $employee['village'] }}</td>
-                    </tr>
-                    <tr>
-                        <td class="label">Kode Pos</td>
-                        <td class="separator">:</td>
-                        <td class="value">{{ $employee['post_code'] }}</td>
-                    </tr>
-                </table>
+                    <table class="info-table">
+                        <tr>
+                            <td class="label">Tgl Lahir</td>
+                            <td class="separator">:</td>
+                            <td class="value">{{ $employee['date_of_birth'] }}</td>
+                        </tr>
+                        <tr>
+                            <td class="label">Tempat Lahir</td>
+                            <td class="separator">:</td>
+                            <td class="value">{{ $employee['place_of_birth'] }}</td>
+                        </tr>
+                        <tr>
+                            <td class="label">Provinsi</td>
+                            <td class="separator">:</td>
+                            <td class="value">{{ $employee['province'] }}</td>
+                        </tr>
+                        <tr>
+                            <td class="label">Kabupaten</td>
+                            <td class="separator">:</td>
+                            <td class="value">{{ $employee['city'] }}</td>
+                        </tr>
+                        <tr>
+                            <td class="label">Kecamatan</td>
+                            <td class="separator">:</td>
+                            <td class="value">{{ $employee['district'] }}</td>
+                        </tr>
+                        <tr>
+                            <td class="label">Kelurahan</td>
+                            <td class="separator">:</td>
+                            <td class="value">{{ $employee['village'] }}</td>
+                        </tr>
+                        <tr>
+                            <td class="label">Kode Pos</td>
+                            <td class="separator">:</td>
+                            <td class="value">{{ $employee['post_code'] }}</td>
+                        </tr>
+                    </table>
+                </div>
+
             </div>
 
         </div>
-
     </div>
-</div>
-@endforeach
+    @endforeach
 
 </body>
+
 </html>
