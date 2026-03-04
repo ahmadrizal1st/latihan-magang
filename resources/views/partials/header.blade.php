@@ -57,14 +57,15 @@
         <li class="dropdown user user-menu">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <img src="{{ asset('adminlte/dist/img/user2-160x160.jpg') }}" class="user-image" alt="User Image">
-            <span class="hidden-xs">{{ session('user.name') }}</span>
+            <span class="username hidden-xs">...</span>
           </a>
           <ul class="dropdown-menu">
             <li class="user-header">
               <img src="{{ asset('adminlte/dist/img/user2-160x160.jpg') }}" class="img-circle" alt="User Image">
               <p>
-                {{ session('user.name') }}
-                <small>{{ session('user.email') }}</small>
+                  <span class="username">...</span>
+                  <br>
+                  <small class="useremail">...</small>
               </p>
             </li>
             <li class="user-body">

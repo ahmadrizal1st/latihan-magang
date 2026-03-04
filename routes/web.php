@@ -16,10 +16,10 @@ use Illuminate\Support\Facades\Route;
 
 // Auth
 Route::prefix('auth')->group(function () {
-    Route::get('/login', [AuthController::class , 'login'])->name('login');
+    Route::get('/login', [AuthController::class , 'login'])->name('login')->middleware('guest');
     Route::get('/register', [AuthController::class , 'register']);
-    Route::post('/login', [AuthController::class , 'doLogin']);
-    Route::post('/logout', [AuthController::class , 'doLogout'])->middleware('auth');
+    Route::post('/login', [AuthController::class , 'authenticate']);
+    Route::post('/logout', [AuthController::class , 'logout'])->middleware('auth');
     Route::get('/me', [AuthController::class , 'me'])->middleware('auth');
 });
 

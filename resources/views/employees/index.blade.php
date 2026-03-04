@@ -583,7 +583,6 @@
                 contentType: 'application/json',
                 data: JSON.stringify({ ids: ids }),
                 xhrFields: { responseType: 'blob' },
-                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                 success: function (blob) {
                     var url = URL.createObjectURL(blob);
                     var a = Object.assign(document.createElement('a'), { href: url, download: 'id-card-bulk-' + Date.now() + '.pdf' });

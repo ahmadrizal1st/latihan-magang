@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 
 class AuthController extends Controller
 {
@@ -18,47 +20,58 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
-    public function doLogin(Request $request)
+    public function authenticate(Request $request): RedirectResponse
     {
-        $request->validate([
-            'email'    => 'required|email',
-            'password' => 'required|string',
+        $credentials = $request->validate([
+            'email'    => ['required', 'email'],
+            'password' => ['required'],
         ]);
 
-        if (!Auth::attempt($request->only('email', 'password'))) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Email atau password salah',
-            ], 401);
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+
+            $response = Http::post(config('app.url') . '/api/login', [
+                'email'    => $request->email,
+                'password' => $request->password,
+            ]);
+
+            if ($response->successful()) {
+                $token = $response->json('token');
+
+                $user = Auth::user();
+                $user->api_token = $token;
+                $user->save();
+
+                return redirect()->intended('/dashboard');
+            }
+
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect('/auth/login')->withErrors([
+                'email' => 'Gagal mendapatkan token, coba lagi.',
+            ]);
         }
 
-        $user = Auth::user();
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        session(['token' => $token, 'user' => $user->toArray()]);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Login berhasil',
-        ]);
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ])->onlyInput('email');
     }
 
     public function me()
     {
         return response()->json([
             'success' => true,
-            'data'    => session('user'),
+            'data'    => auth()->user(),
         ]);
     }
 
-    public function doLogout(Request $request)
+    public function logout(Request $request): RedirectResponse
     {
-        Auth::user()?->tokens()->delete();
-        session()->flush();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Logout berhasil',
-        ]);
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/auth/login');
     }
 }

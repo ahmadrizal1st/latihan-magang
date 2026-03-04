@@ -93,9 +93,26 @@
   <script>
     $.ajaxSetup({
       headers: {
-        'Authorization': 'Bearer {{ session("token") }}',
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        'Authorization': 'Bearer {{ auth()->user()->api_token }}',
       }
+    });
+
+    $(function () {
+      $.ajax({
+        url: '{{ url("/auth/me") }}',
+        method: 'GET',
+        success: function (res) {
+          if (res.success && res.data) {
+            $('.username').text(res.data.name);
+            $('.useremail').text(res.data.email);
+          } else {
+            window.location.href = '{{ url("/auth/login") }}';
+          }
+        },
+        error: function () {
+          window.location.href = '{{ url("/auth/login") }}';
+        }
+      });
     });
   </script>
   @stack('scripts')
