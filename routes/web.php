@@ -11,43 +11,47 @@ use App\Http\Controllers\Web\ProvinceController;
 use App\Http\Controllers\Web\SettingController;
 use App\Http\Controllers\Web\UserController;
 use App\Http\Controllers\Web\VillageController;
+use App\Http\Controllers\Web\LeaveRequestController;
 use Illuminate\Support\Facades\Route;
 
 // User
-Route::get('/user', [UserController::class, 'index']);
+Route::get('/user', [UserController::class , 'index']);
 
 // Auth
 Route::prefix('auth')->group(function () {
-    Route::get('/login',    [AuthController::class, 'login']);
-    Route::get('/register', [AuthController::class, 'register']);
-    Route::post('/login',   [AuthController::class, 'doLogin']);
-    Route::post('/logout',  [AuthController::class, 'doLogout']);
-    Route::get('/me',       [AuthController::class, 'me']);
+    Route::get('/login', [AuthController::class , 'login']);
+    Route::get('/register', [AuthController::class , 'register']);
+    Route::post('/login', [AuthController::class , 'doLogin']);
+    Route::post('/logout', [AuthController::class , 'doLogout']);
+    Route::get('/me', [AuthController::class , 'me']);
 });
 
 // Dashboard
-Route::get('/dashboard', [DashboardController::class,'index']);
+Route::get('/dashboard', [DashboardController::class , 'index']);
 
 // Counter
-Route::get('/counter', [CounterController::class, 'index']);
+Route::get('/counter', [CounterController::class , 'index']);
 
 // Employee
-Route::get('/employee', [EmployeeController::class, 'index']);
+Route::get('/employee', [EmployeeController::class , 'index']);
 
 // Employee Job
-Route::get('/job', [EmployeeJobController::class, 'index']);
+Route::get('/job', [EmployeeJobController::class , 'index']);
 
 // Province
-Route::get('/province', [ProvinceController::class,'index']);
+Route::get('/province', [ProvinceController::class , 'index']);
 
 // City
-Route::get('/city', [CityController::class, 'index']);
+Route::get('/city', [CityController::class , 'index']);
 
 // District
-Route::get('/district', [DistrictController::class,'index']);
+Route::get('/district', [DistrictController::class , 'index']);
 
 // Village
-Route::get('/village', [VillageController::class,'index']);
+Route::get('/village', [VillageController::class , 'index']);
 
 // Setting
-Route::get('/setting', [SettingController::class,'index']);
+Route::get('/setting', [SettingController::class , 'index']);
+
+// Leave Request
+Route::get('/leave-request', [LeaveRequestController::class , 'index']);
