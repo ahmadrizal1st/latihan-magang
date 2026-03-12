@@ -9,7 +9,9 @@ use App\Interfaces\EmployeeJobRepositoryInterface;
 use App\Interfaces\EmployeeRepositoryInterface;
 use App\Interfaces\ProvinceRepositoryInterface;
 use App\Interfaces\SettingRepositoryInterface;
+use App\Interfaces\UserRepositoryInterface;
 use App\Interfaces\VillageRepositoryInterface;
+use App\Interfaces\LeaveRequestRepositoryInterface;
 use App\Repositories\CityRepository;
 use App\Repositories\CounterRepository;
 use App\Repositories\DistrictRepository;
@@ -17,7 +19,9 @@ use App\Repositories\EmployeeJobRepository;
 use App\Repositories\EmployeeRepository;
 use App\Repositories\ProvinceRepository;
 use App\Repositories\SettingRepository;
+use App\Repositories\UserRepository;
 use App\Repositories\VillageRepository;
+use App\Repositories\LeaveRequestRepository;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -28,43 +32,53 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(
-            EmployeeRepositoryInterface::class,
-            EmployeeRepository::class,
+            UserRepositoryInterface::class ,
+            UserRepository::class ,
         );
 
         $this->app->bind(
-            CityRepositoryInterface::class,
-            CityRepository::class,
+            EmployeeRepositoryInterface::class ,
+            EmployeeRepository::class ,
         );
 
         $this->app->bind(
-            EmployeeJobRepositoryInterface::class,
-            EmployeeJobRepository::class,
+            CityRepositoryInterface::class ,
+            CityRepository::class ,
         );
 
         $this->app->bind(
-            ProvinceRepositoryInterface::class,
-            ProvinceRepository::class,
+            EmployeeJobRepositoryInterface::class ,
+            EmployeeJobRepository::class ,
         );
 
         $this->app->bind(
-            DistrictRepositoryInterface::class,
-            DistrictRepository::class,
+            ProvinceRepositoryInterface::class ,
+            ProvinceRepository::class ,
         );
 
         $this->app->bind(
-            VillageRepositoryInterface::class,
-            VillageRepository::class,
+            DistrictRepositoryInterface::class ,
+            DistrictRepository::class ,
         );
 
         $this->app->bind(
-            CounterRepositoryInterface::class,
-            CounterRepository::class,
+            VillageRepositoryInterface::class ,
+            VillageRepository::class ,
         );
 
         $this->app->bind(
-            SettingRepositoryInterface::class,
-            SettingRepository::class,
+            CounterRepositoryInterface::class ,
+            CounterRepository::class ,
+        );
+
+        $this->app->bind(
+            SettingRepositoryInterface::class ,
+            SettingRepository::class ,
+        );
+
+        $this->app->bind(
+            LeaveRequestRepositoryInterface::class ,
+            LeaveRequestRepository::class ,
         );
     }
 
@@ -73,6 +87,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+    //
     }
 }
